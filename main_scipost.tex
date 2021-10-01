@@ -1,0 +1,468 @@
+\documentclass[submission, LectureNotes]{SciPost}
+
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{color}
+\usepackage{enumerate}
+\usepackage{physics}
+\usepackage{siunitx}
+\usepackage{listings}
+\usepackage{pythonhighlight}
+
+
+\definecolor{LightGray}{rgb}{0.9, 0.9, 0.9}
+%\definecolor{mycolor}{rgb}{0, 0.5, 0}
+%\newcommand{\JO}[1]{{\color{mycolor}#1}}
+%\newcommand{\KY}[1]{{\color{magenta}#1}}
+%\newcommand{\HS}[1]{{\color{red}#1}}
+%\newcommand{\TN}[1]{{\color{blue}#1}}
+%\newcommand{\delete}[1]{{\color[gray]{0.7}#1}}
+%\newcommand\NEEDCITE{[REF?]}
+
+
+\newcommand{\hatd}{{\ensuremath{\hat{d}}}}
+\newcommand{\hatc}{{\ensuremath{\hat{c}}}}
+\newcommand{\Ne}{{\ensuremath{N_\mathrm{e}}}}
+\newcommand{\bk}{\ensuremath{{\bf k}}}
+\newcommand{\br}{\ensuremath{{\bf r}}}
+
+\newcommand{\bx}{\bm{x}}
+\newcommand{\by}{\bm{y}}
+\newcommand{\bS}{S}
+\newcommand{\bU}{U}
+\newcommand{\bV}{V}
+\newcommand{\bK}{K}
+\newcommand{\brho}{\bm{\rho}}
+\newcommand{\bG}{\bm{G}}
+\newcommand{\wmax}{\ensuremath{{\omega_\mathrm{max}}}}
+\newcommand{\Nband}{\ensuremath{{N_\mathrm{band}}}}
+\newcommand\cee{\mathrm{c}}%
+\newcommand\cdag{\mathrm{c}^\dagger}%
+\newcommand\ee{\mathrm{e}}%
+\newcommand\ii{\mathrm{i}}%
+\newcommand\iv{\ii\nu}%
+\newcommand\iw{\ii\omega}%
+\newcommand\iW{\ii\Omega}%
+\newcommand\WW{\mathcal{W}}
+\newcommand\FF{\mathrm{F}}
+\newcommand\BB{\mathrm{B}}
+\newcommand\Fbar{\mathrm{\bar F}}
+\newcommand\Bbar{\mathrm{\bar B}}
+\newcommand{\GW}{{\ensuremath{GW}}}
+\newcommand{\tauk}{\ensuremath{\bar{\tau}^\alpha_k}}
+\newcommand{\taukF}{\ensuremath{\bar{\tau}^\mathrm{F}_k}}
+\newcommand{\wk}{\ensuremath{\bar{\omega}^\alpha_k}}
+
+\newcommand{\wkF}{\ensuremath{\bar{\omega}^\mathrm{F}_k}}
+
+\newcommand{\hatFmat}{\hat{\mathbf{F}}}
+\newcommand{\Fmat}{{\mathbf{F}}}
+
+\newcommand{\KF}{\ensuremath{K^\mathrm{F}}}
+\newcommand{\KB}{\ensuremath{K^\mathrm{B}}}
+\newcommand{\kF}{\ensuremath{k^\mathrm{F}}}
+\newcommand{\kB}{\ensuremath{k^\mathrm{B}}}
+\def\deltaB{\delta_{\alpha, \mathrm{B}}}
+\def\deltaF{\delta_{\alpha, \mathrm{F}}}
+
+\begin{document}
+
+\begin{center}{\Large \textbf{
+    Numerical recipes for many-body physics
+}}\end{center}
+
+\begin{center}
+Hiroshi Shinaoka\textsuperscript{1*},
+\end{center}
+
+\begin{center}
+{\bf 1} Department of Physics, Saitama University, Saitama 338-8570, Japan
+\\
+* h.shinaoka@gmail.com
+\end{center}
+
+\begin{center}
+\today
+\end{center}
+
+
+\section*{Abstract}
+This lecture note reviews ....
+
+\vspace{10pt}
+\noindent\rule{\textwidth}{1pt}
+\tableofcontents\thispagestyle{fancy}
+\noindent\rule{\textwidth}{1pt}
+\vspace{10pt}
+
+\section{Introduction}
+
+\clearpage
+\section{Green's functions}
+\subsection{Fermionic and bosonic correlation functions}
+%One-particle Green's functions represent one-particle responses of an equilibrium state.
+We define retarded/advanced/imaginary-time correlatin functions as
+\begin{align}
+	G^\mathrm{R}(t-t') &= -\ii \theta(t-t')\expval{A(t)B(t')\mp B(t')A(t)},\\
+	G^\mathrm{A}(t-t') &= -\ii \theta(t'-t)\expval{A(t)B(t')\mp B(t')A(t)},\\
+	G(\tau-\tau') &= -\theta(\tau-\tau')\expval{A(\tau)B(\tau')\pm B(\tau')A(\tau)}.
+\end{align}
+The operators $A$ and $B$ are either fermionic or bosonic.
+The signs $\mp$ are for bosons and fermions, respectively.
+$\expval{\cdots}$ represents statistical average in the the grand canonical ensamble.
+%The symbols $a$ and $b$ denote spin orbitals,
+%while $c_a$ and $c^\dagger_b$ denote annihilation and creation operators.
+%The first two are defined in real time, while the last one in imaginary time.
+%
+%These Green's functions 
+These real-time/imaginary-time correlation functions are transformed to
+real frequency and imaginary (Matsubara) frequencies, respectively:
+%For a while, we focus on fermionic Green's functions.
+%can be represented in a unified form using Lehmann representation:
+\begin{align}
+    G^\mathrm{R}(\omega) &= \int_{-\infty}^\infty \dd t e^{\ii\omega t}G^\mathrm{R}(t),\\
+    G^\mathrm{A}(\omega) &= \int_{-\infty}^\infty \dd t e^{\ii\omega t}G^\mathrm{A}(t),\\
+    G(\iv) &= \int_0^\beta \dd \tau e^{\iv \tau}G(\tau),\label{eq:matsubara-AB}
+\end{align}
+where Matsubara frequencies are given by $\nu = 2n\pi/\beta$ and $\nu = (2n+1)\pi/\beta$ for bosons/fermions, respectively ($n\in \mathbb{N}$).
+We defined $\beta = 1/T$ ($k_\mathrm{B}=1$).
+%These correlation functions be analytically transformed to each other as we will see later.
+
+In the grand canonical ensemble, $G(\iv)$ has the Lehmann representation:
+\begin{align}
+    G_{AB}(\iv) &= \int \dd \omega \frac{\rho_{AB}(\omega)\omega^{\delta_{\alpha,\mathrm{B}}}}{\iv - \omega},\\
+    \rho_{AB}(\omega) &\equiv -\frac{1}{\pi\omega^\delta_{\alpha,\mathrm{B}}} \imaginary G_{AB}(\omega + 0^+)\\
+    & = \sum_{mn}(e^{-\beta E_n} \mp e^{-\beta E_m})
+    \mel{n}{A}{m}\mel{m}{B}{n}
+    \delta(\omega - (E_m-E_n)),\label{eq:matsubara-lehmann}
+\end{align}
+where
+$n$, $m$ run over all eigenstates of the system ($E_{m/n}$ denotes an eigenvalue).
+We introduced the extra factor $\omega^{\delta_{\alpha,\mathrm{B}}}$ for bosons ($\alpha$ represents the staistics),
+whose reasoning will be explained later.
+
+Using Eq.~\eqref{eq:matsubara-lehmann},
+we can analytically continute $G(\iv)$ to the whole complex plane as $G(z)$ for $z\in \mathbb{Z}$.
+Note that there are poles or a branch cut on the real axis.
+%Using $G_{AB}(z)$, the real-frequency and imaginary-frequency (Matsubara) Green's funcitons are analytically continued as
+The advanced and retarded Green's functions are given by the value of $G_{AB}(z)$ above/below the real axis as
+\begin{align}
+    G^\mathrm{R}_{AB}(\omega) &= G_{AB}(\omega+\ii 0^+),\\
+    G^\mathrm{A}_{AB}(\omega) &= G_{AB}(\omega+\ii 0^-).
+\end{align}
+Due to the branch cut on the real axis, $G^\mathrm{R}_{AB}(\omega) \neq G^\mathrm{A}_{AB}(\omega)$ in general.
+
+At high frequencies, $G(\iv)$ decays in power.
+Applying partial integration recursively to Eq.~\eqref{eq:matsubara-AB},
+we obtain its high frequency expansion,
+\begin{align}
+    G_{AB}(\iv) &= 
+    \frac{c^{(1)}_{AB}}{\iv} +
+    \frac{c^{(2)}_{AB}}{(\iv)^2} +
+    \frac{c^{(3)}_{AB}}{(\iv)^3} + \cdots,
+\end{align}
+where
+\begin{align}
+    c^{(m)}_{AB} &= (-1)^{m} \qty(G_{AB}^{(m-1)}(0^+) - G_{AB}^{(m-1)}(0^-)).
+\end{align}
+In particular, one can show
+\begin{align}
+   c^{(1)}_{AB} &= \poissonbracket{A}{B}.
+\end{align}
+
+
+\subsection{Fermionic one-particle Green's function}
+We focus on the fermionic cases where $A$ and $B$ are annihilation and creation operators of fermions, respectively.
+In such cases, the correaltion is called ``(one-particle) Green's function''.
+The Lehmann represention of the Green's function reads
+\begin{align}
+    G_{ab}(\iv) &= \int \dd \omega \frac{\rho_{ab}(\omega)}{\iv - \omega},\\
+    \rho_{AB}(\omega) &\equiv -\frac{1}{\pi} \imaginary G_{ab}(\omega + 0^+)\\
+    & = \sum_{mn}(e^{-\beta E_n} + e^{-\beta E_m})
+    \mel{n}{c^\dagger_a}{m}\mel{m}{c_b}{n}
+    \delta(\omega - (E_m-E_n)),\label{eq:matsubara-g-lehmann}
+\end{align}
+where $a$ and $b$ denote spin orbitals.
+
+Applying partial integration recursively to Eq.~\eqref{eq:matsubara-AB},
+we obtain a high frequency expansion of the Green's function,
+\begin{align}
+    G_{ab}(\iv) &= 
+    \frac{c^1_{ab}}{\iv} +
+    \frac{c^2_{ab}}{(\iv)^2} +
+    \frac{c^3_{ab}}{(\iv)^3} +
+    O\qty(\frac{1}{(\iv)^4}),
+\end{align}
+where
+\begin{align}
+    c^{m}_{ab} &= (-1)^{m} \qty(G_{ab}^{(m-1)}(0^+) - G_{ab}^{(m-1)}(0^-)).
+\end{align}
+In particular, one can show
+\begin{align}
+   c^{0}_{ab} &= \poissonbracket{c_a}{c^\dagger_b} = \delta_{ab}.
+\end{align}
+
+This clearly indicates that the Green's function has a discontity at $\tau=0,\pm \beta, \pm 2\beta$ for $a=b$.
+At these points, the off-diagonal components ($a\neq b$) have a slope discontity or a discontity in higher-order derivatives.
+For $0 <\tau < \beta$, the Green's function is a smooth and analytic function.
+%
+%The sum rules is followed by $c_{ab}^1 = \delta_{ab}$.
+%The slow power-law decay originates from the discontity of $G(\tau)$ and its derivatives at $\tau=0,\pm \beta, \pm 2\beta, \cdots$.
+%\
+%
+%Below, we summarize the analytic properties of the fermionic Green's function.
+%
+%Pros:
+%\begin{itemize}
+    %\item $G(\tau)$ is a smooth function for $0<\tau<\beta$.
+    %\item Good resoluation at low frequencies
+%\end{itemize}
+%
+%Cons:
+%\begin{itemize}
+    %\item $G(\tau)$ is not continuous at $\tau=0,\pm \beta, \cdots$, leading to the nesscecity of cumbersome numerical tricks.
+    %\item Numerical analytic continuation to high frequencies is not stable.
+%\end{itemize}
+
+\subsection{Example: Hubbard atom}
+We consider the single-orbital fermionic Hubbard atom at half filling:
+\begin{align}
+   \mathcal{H} &= U n_\uparrow n_\downarrow - \mu (n_\uparrow + n_\downarrow),
+\end{align}
+where $mu= U/2$ and $U>0$.
+By simple calculations, one obtains
+\begin{align}
+    G_{\sigma\sigma'}(z) &= \frac{1}{2}\qty(\frac{1}{z-U/2} + \frac{1}{z+U/2})\delta_{\sigma\sigma'},\label{eq:gz-hubbard-atom}
+\end{align}
+where $\sigma$ and $\sigma'$ are spin indices.
+This can be transformed to the imaginary-time domain as
+\begin{align}
+    G_{\sigma\sigma'}(\tau) &= \frac{1}{2}
+    \qty(
+        \frac{e^{-\tau U/2}}{1+e^{-\beta U/2}} +
+        \frac{e^{\tau U/2}}{1+e^{-\beta U/2}}
+    )\delta_{\sigma\sigma'}\label{eq:gtau-hubbard-atom}
+\end{align}
+for $0 < \tau<\beta$.
+We used the formula
+\begin{align}
+   T\sum_{\nu} \frac{e^{-\iv\tau}}{\iv - \epsilon} &= \frac{e^{-\epsilon\tau}}{1+e^{-\beta\epsilon}}.
+\end{align}
+
+Figure~\ref{fig:hubbard-atom} plots Eqs.~\eqref{eq:gz-hubbard-atom} and \eqref{eq:gtau-hubbard-atom} for several different values of $\beta$.
+One can see that $G(\tau)$ changes very rapidly around $\tau=0$ and $\beta$ at large $\beta$.
+Due to the sum rule and the half-filling condition,
+$G_{\sigma\sigma'}(0^+)=G_{\sigma\sigma'}(\beta+0^-) = -1/2$.
+On the other hand, $G(\iv)$ decays only algebratically at high frequencies.
+
+
+\clearpage
+\section{Conventional numerical tools for Green's function}
+\subsection{Uniform mesh}
+Due to the algebratical decay of $G(\iv)$ and the strong $\tau$ dependence of $G(\tau)$ around $\tau=0$,
+it is a bit cumbersome to treat the Green's function numerically.
+In this section, we explain a conventional way of doing so.
+
+A naive way to store the values of the Green's function numerically is to use uniform meshes in $\iv$ and $\tau$.
+Although you will see that this fails at low temperatures later,
+it may be instructive to start with the simplest one.
+In the imaginary-frequency domain, we use a uniform mesh consisting of the lowest $2N_\nu$ imaginary frequencies:
+\begin{align}
+&\qty{(2n+1)\pi/\beta~| n=-N_\nu, -N_\nu+1, \cdots N_\nu-2, N_\nu-1}.
+\end{align}
+In the imaginary-time domain, we use a uniform mesh: 
+\begin{align}
+&\qty{\frac{\beta t}{N_\tau-1}~|~t=0, 1, \cdots, N_\tau-1},
+\end{align}
+where the two end points are interpretated as $0^+$ and $\beta + 0^-$.
+
+Let us discretize some $G(\tau)$ on the uniform mesh as $G_t$ ($t=0, \cdots, N_\tau-1$).
+How many mesh points are sufficient for representing $G(\tau)$ accurately?
+We consider the simplest case, i.e. the hubbard atom Eq.~\eqref{eq:gtau-hubbard-atom}.
+In this case, $G(\tau)$ can be approximated around $\tau=0$ as
+\begin{align}
+    G(\tau) &\propto e^{-\tau U/2}.
+\end{align}
+This indicates that we must increase the density of the mesh points proportionally with $U$ around $\tau=0$.
+Considering the band width of the spectrum is $U$, one can see that $N_\tau$ must increase as $O(\beta \wmax)$ in general cases,
+where $\wmax$ is a cutoff frequency of the spectrum: i.e., the spectrum is non-zero only in $[-\wmax, \wmax]$.
+
+The Green's function $G(\tau)$ is known exactly only on the mesh points.
+Thus, we need to \textit{interpolate} the values to evaluate the Green's function in bewetween mesh points.
+An easy way is to use some piecewise polynomial interpolation.
+This is justified by the fact that $G(\tau)$ is a smooth function for $0< \tau<\beta$.
+
+\subsection{Fourier transformation}
+We describe how to Fourier transform numerical data on a uniform mesh in $\tau$ to Matsubara frequencies.
+We first interpolate the numerical value of $G(\tau)$ on a finer mesh in $\tau$, e.g., cubic spline interpolation.
+\begin{align}
+   G(\iv) &\approx \frac{\beta}{N_\tau}\sum_{t=0}^{N_\tau-1} e^{\iv \tau_t} G_t,
+\end{align}
+where $\tau_t = \frac{\beta t}{N_\tau-1}$ and $G_t$ is the numerical value at $\tau_t$.
+
+
+\clearpage
+\section{Sparse modeling approach}
+We refer the reader to Ref.~\ref{lecture_note_ir} for the description of
+the IR basis and the sparse sampling method.
+In this section, we provide only supplementary information on these techknologies that is not reviewed in the lecture note.
+We use the same notation as used in the lecture.
+
+\subsection{Bosonic IR basis}
+%The bosonic IR basis is defined in terms of the SVD of the bosonic kernel
+We consider a bosonic correlation function
+\begin{equation}
+    \hat{G}(\iw)=\int_0^\beta\dd{\tau}\ee^{\iw\tau}\langle T_{\tau}A(\tau)B(0)\rangle,\label{eq:giwdef}
+\end{equation}
+where $A$ and $B$ are bosonic operators.
+Its Lehmann representation function reads
+\begin{equation}
+    \hat{G}(\iw)=\int_{-\wmax}^\wmax\dd{\omega'} K^\mathrm{B}(\iw,\omega')\rho(\omega'),
+\end{equation}
+where the bosonic kernel is defined by
+\begin{align}
+    K^\mathrm{B}(\iw, \omega') &= \frac{\omega'}{\iw-\omega'}.\label{eq:KB-matsu}
+\end{align}
+The spectral function is defined by
+\begin{equation}
+    \rho(\omega) = -\frac{\omega}{\pi}
+    \mathrm{Im} \hat G(\omega+\mathrm{i}0^+).
+        \label{eq:rho}
+\end{equation}
+The bosonic kernel is transformed to the $\tau$ space as
+\begin{align}
+    K^\mathrm{B}(\tau,\omega') &= \frac{\omega' e^{-\tau\omega'}}{1-e^{-\beta\omega'}}.\label{eq:KB-tau}
+\end{align}
+The extra factor of $\omega'$ in Eq.~\eqref{eq:KB-matsu} was inroduced
+to avoid the divengence of $K^\mathrm{B}(\tau,\omega')$ in the limit of $\omega'\rightarrow 0$.
+In Eq.~\eqref{eq:KB-matsu}, the two $\omega'$ in the numerator and denominator cancel out in this limit.
+
+The IR basis functions, i.e., singular functions of the kernel, are illusrated in Fig.~\ref{fig:uvB}.
+%\begin{equation}
+    %\hat{G}^\alpha(\iw)=\int_0^\beta\dd{\tau}\ee^{\iw\tau}\langle T_{\tau}A^\alpha(\tau)B^\alpha(0)\rangle,\label{eq:giwdef}
+%\end{equation}
+As discussed in Ref.~\ref{Chikano:2018gd}, the IR basis functions are insulating.
+
+
+As an example, let us look at the density-density correlation function of the Hubbard atom.
+This correlation function includes a constant term in $\tau$, which corresponds to a delta function at zero frequency.
+
+\begin{itemize}
+    \item Zero frequency peak
+\end{itemize}
+
+\clearpage
+\section{Fitting numerical data}
+As reviewed in the lecture note, \textit{fitting} is a convenient way to transform numerical data either in the imaginary-time domain or in the imaginary-frequency domain.
+In the practical calculations, we need a special care on the numerical stability of the fitting.
+We explain how to do it in a stable way using several typical cases.
+
+%\subsubsection{Fitting \textit{clean} numerical data}
+\begin{itemize}
+    \item Matsubaqra data
+    \item Regularization
+    \item Condition number
+    \item What if the data is not \textit{clean}?
+    \item How to detect overfitting
+\end{itemize}
+
+\clearpage
+\section{Second-order perturbation}
+
+\clearpage
+\section{Random phase approximation}
+\subsection{Hartree-Fock approximation}
+\clearpage
+\subsection{Restricted Hartree-Fock calculations of sigle-orbital Hubbard model}
+
+\clearpage
+\subsection{Unrestricted Hartree-Fock calculations of multi-orbital Hubbard model}
+In this subsection, we briefly reivew the unrestricted Hartree-Fock approximation of multi-obital Hubbard model.
+We consider a multi-orbital Hubbard model:
+\begin{align}
+    \hat{H} &= \sum_{ij=1}^N t_{ij} \hat{c}^\dagger_i \hat{c}_j + \frac{1}{2} \sum_{ijkl=1}^N U_{ijlk}\hat{c}^\dagger_i \hat{c}^\dagger_j \hat{c}_k \hat{c}_l
+\end{align}
+Here, we \textit{assume} the following properties:
+\begin{align}
+U_{iilk} &= 0,\label{eq:U-prop-start}\\
+U_{ijll} &= 0,\\
+U_{ijlk} &= U_{jikl}, \\
+U_{ijlk} &= U_{lkij}^*.\label{eq:U-prop-end}
+\end{align}
+
+The antisymmetrized Colomb matrix elements are defined by
+\begin{align}
+    \bar{U}_{ijlk} &\equiv U_{ijlk} - U_{ijkl}.
+\end{align}
+These satisfy
+\begin{align}
+\bar{U}_{ijlk} &= -\bar{U}_{ijkl} = -\bar{U}_{jilk}
+\end{align}
+in addition to Eqs.~(\ref{eq:U-prop-start})--(\ref{eq:U-prop-end}).
+In this notation, the Hamiltonian reads
+\begin{align}
+    \hat{H} &= \sum_{ij=1}^N t_{ij} \hat{c}^\dagger_i \hat{c}_j + \frac{1}{4} \sum_{ijkl=1}^N \bar{U}_{ijlk}\hat{c}^\dagger_i \hat{c}^\dagger_j \hat{c}_k \hat{c}_l.\label{eq:ham-antisymm}
+\end{align}
+
+The mean-field decoupling of Eq.~\eqref{eq:ham-antisymm} yields
+\begin{align}
+& \mathcal{H}_\mathrm{MF} \nonumber \\
+& = \frac{1}{4} \sum_{ijkl=1}^N \bar{U}_{ijlk}
+\Big\{
+\expval{\hat{c}^\dagger_i \hat{c}_l} \hat{c}^\dagger_j \hat{c}_k
++\hat{c}^\dagger_i \hat{c}_l \expval{\hat{c}^\dagger_j \hat{c}_k}
+-\expval{\hat{c}^\dagger_i \hat{c}_k} \hat{c}^\dagger_j \hat{c}_l
+-\hat{c}^\dagger_i \hat{c}_k \expval{\hat{c}^\dagger_j \hat{c}_l}\\
+&\hspace{2em} - \expval{\hat{c}^\dagger_i \hat{c}_l} \expval{\hat{c}^\dagger_j \hat{c}_k} + \expval{\hat{c}^\dagger_i \hat{c}_k} \expval{\hat{c}^\dagger_j \hat{c}_l}
+\Big\}\nonumber\\
+& = \frac{1}{2} \sum_{ijkl=1}^N \bar{U}_{ijlk}
+\Big\{
+\expval{\hat{c}^\dagger_i \hat{c}_l} \hat{c}^\dagger_j \hat{c}_k
++\hat{c}^\dagger_i \hat{c}_l \expval{\hat{c}^\dagger_j \hat{c}_k}
+-\expval{\hat{c}^\dagger_i \hat{c}_l} \expval{\hat{c}^\dagger_j \hat{c}_k} 
+\Big\}\nonumber \\
+&= \sum_{ijkl=1}^N \bar{U}_{ijlk}
+\expval{\hat{c}^\dagger_i \hat{c}_l} \hat{c}^\dagger_j \hat{c}_k
+-\frac{1}{2}\sum_{ijkl=1}^N \bar{U}_{ijlk}\expval{\hat{c}^\dagger_i \hat{c}_l} \expval{\hat{c}^\dagger_j \hat{c}_k} 
+.
+\end{align}
+
+Thus, the whole HF Hamiltonian reads
+\begin{align}
+\mathcal{H}_\mathrm{HF} &= \sum_{ij=1}^N T_{ij} \hatc_i^\dagger \hatc_j -\frac{1}{2}\sum_{ijkl=1}^N \bar{U}_{ijlk}\expval{\hat{c}^\dagger_i \hat{c}_l} \expval{\hat{c}^\dagger_j \hat{c}_k},
+\end{align}
+where the hopping-matrix elements including the mean fields are given by
+\begin{align}
+T_{ij} \equiv t_{ij} + \sum_{kl=1}^N \bar{U}_{i k j l} \expval{\hatc^\dagger_k \hatc_l}.\label{eq:Tij}
+\end{align}
+
+In a similar manner, one can derive the Hartree-Fock approximation for a lattice system that
+has only intra-unit-cell electron interactions.
+We define Fourier transfrom between the real space and the momentum space as
+\begin{align}
+    c_i(\bk) &=  \sum_{\bf r} e^{\ii {\bf k} {\bf r}} c_i({\bf r}),\\
+    c^\dagger_i(\bk) &=  \sum_{\bf r} e^{-\ii {\bf k} {\bf r}} c^\dagger_i({\bf r}),\\
+    c_i(\br) &= \frac{1}{{N}} \sum_\bk e^{-\ii \bk\cdot\br} c_i(\bk),\\
+    c^\dagger_i(\br) &= \frac{1}{{N}} \sum_\bk e^{\ii \bk\cdot\br} c^\dagger_i(\bk).
+\end{align}
+
+
+\clearpage
+\section{Dynamical mean-field theory}
+
+\clearpage
+\section{Wannier90}
+
+\clearpage
+\section{MPI parallelization}
+
+\begin{appendix}
+\end{appendix}
+
+%\bibliography{ref,misc}
+
+\nolinenumbers
+
+\end{document}
+
