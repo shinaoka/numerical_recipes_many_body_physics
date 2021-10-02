@@ -106,7 +106,7 @@ We define retarded/advanced/imaginary-time correlatin functions as
 \begin{align}
 	G^\mathrm{R}(t-t') &= -\ii \theta(t-t')\expval{A(t)B(t')\mp B(t')A(t)},\\
 	G^\mathrm{A}(t-t') &= -\ii \theta(t'-t)\expval{A(t)B(t')\mp B(t')A(t)},\\
-	G(\tau-\tau') &= -\theta(\tau-\tau')\expval{A(\tau)B(\tau')\pm B(\tau')A(\tau)}.
+	G(\tau-\tau') &= -\theta(\tau-\tau')\expval{A(\tau)B(\tau')} \mp \theta(\tau'-\tau) \expval{B(\tau')A(\tau)}.
 \end{align}
 The operators $A$ and $B$ are either fermionic or bosonic.
 The signs $\mp$ are for bosons and fermions, respectively.
@@ -189,9 +189,9 @@ Applying partial integration recursively to Eq.~\eqref{eq:matsubara-AB},
 we obtain a high frequency expansion of the Green's function,
 \begin{align}
     G_{ab}(\iv) &= 
-    \frac{c^1_{ab}}{\iv} +
-    \frac{c^2_{ab}}{(\iv)^2} +
-    \frac{c^3_{ab}}{(\iv)^3} +
+    \frac{c^{(1)}_{ab}}{\iv} +
+    \frac{c^{(2)}_{ab}}{(\iv)^2} +
+    \frac{c^{(3)}_{ab}}{(\iv)^3} +
     O\qty(\frac{1}{(\iv)^4}),
 \end{align}
 where
@@ -230,7 +230,7 @@ We consider the single-orbital fermionic Hubbard atom at half filling:
 \begin{align}
    \mathcal{H} &= U n_\uparrow n_\downarrow - \mu (n_\uparrow + n_\downarrow),
 \end{align}
-where $mu= U/2$ and $U>0$.
+where $\mu= U/2$ and $U>0$.
 By simple calculations, one obtains
 \begin{align}
     G_{\sigma\sigma'}(z) &= \frac{1}{2}\qty(\frac{1}{z-U/2} + \frac{1}{z+U/2})\delta_{\sigma\sigma'},\label{eq:gz-hubbard-atom}
@@ -245,22 +245,29 @@ This can be transformed to the imaginary-time domain as
     )\delta_{\sigma\sigma'}\label{eq:gtau-hubbard-atom}
 \end{align}
 for $0 < \tau<\beta$.
-We used the formula
-\begin{align}
-   T\sum_{\nu} \frac{e^{-\iv\tau}}{\iv - \epsilon} &= \frac{e^{-\epsilon\tau}}{1+e^{-\beta\epsilon}}.
-\end{align}
 
-Figure~\ref{fig:hubbard-atom} plots Eqs.~\eqref{eq:gz-hubbard-atom} and \eqref{eq:gtau-hubbard-atom} for several different values of $\beta$.
-One can see that $G(\tau)$ changes very rapidly around $\tau=0$ and $\beta$ at large $\beta$.
+\subsection{Exercise 1}
+Plot Eqs.~\eqref{eq:gz-hubbard-atom} and \eqref{eq:gtau-hubbard-atom} for several different values of $\beta$.
+You will see that $G(\tau)$ changes very rapidly around $\tau=0$ and $\beta$ at large $\beta$.
 Due to the sum rule and the half-filling condition,
 $G_{\sigma\sigma'}(0^+)=G_{\sigma\sigma'}(\beta+0^-) = -1/2$.
-On the other hand, $G(\iv)$ decays only algebratically at high frequencies.
+On the other hand, $G(\iv)$ decays only algebraically at high frequencies.
+
+\subsection{Exercise 2}
+Derive Eq.~\eqref{eq:gtau-hubbard-atom} from Eq.~\eqref{eq:gz-hubbard-atom} using 
+the formula
+\begin{align}
+   T\sum_{\nu} \frac{e^{-\iv\tau}}{\iv - \epsilon} &= - \frac{e^{-\epsilon\tau}}{1+e^{-\beta\epsilon}}.\label{eq:single-pole-ft}
+\end{align}
+
+\subsection{Exercise 3}
+Please numerically check how $G(\tau)$ of the Hubbard atom behaves near $\tau=0$ if we truncate the summation in Eq.~\eqref{eq:single-pole-ft} at some frequency.
 
 
 \clearpage
 \section{Conventional numerical tools for Green's function}
 \subsection{Uniform mesh}
-Due to the algebratical decay of $G(\iv)$ and the strong $\tau$ dependence of $G(\tau)$ around $\tau=0$,
+Due to the algebraic decay of $G(\iv)$ and the strong $\tau$ dependence of $G(\tau)$ around $\tau=0$,
 it is a bit cumbersome to treat the Green's function numerically.
 In this section, we explain a conventional way of doing so.
 
