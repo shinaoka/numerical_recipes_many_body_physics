@@ -9,6 +9,7 @@
 \usepackage{siunitx}
 \usepackage{listings}
 \usepackage{pythonhighlight}
+\usepackage{exercise}
 
 
 \definecolor{LightGray}{rgb}{0.9, 0.9, 0.9}
@@ -125,7 +126,7 @@ real frequency and imaginary (Matsubara) frequencies, respectively:
     G^\mathrm{A}(\omega) &= \int_{-\infty}^\infty \dd t e^{\ii\omega t}G^\mathrm{A}(t),\\
     G(\iv) &= \int_0^\beta \dd \tau e^{\iv \tau}G(\tau),\label{eq:matsubara-AB}
 \end{align}
-where Matsubara frequencies are given by $\nu = 2n\pi/\beta$ and $\nu = (2n+1)\pi/\beta$ for bosons/fermions, respectively ($n\in \mathbb{N}$).
+where Matsubara frequencies are given by $\nu = 2n\pi/\beta$ and $\nu = (2n+1)\pi/\beta$ for bosons/fermions, respectively ($n\in \mathbb{Z}$).
 We defined $\beta = 1/T$ ($k_\mathrm{B}=1$).
 %These correlation functions be analytically transformed to each other as we will see later.
 
@@ -143,7 +144,7 @@ We introduced the extra factor $\omega^{\delta_{\alpha,\mathrm{B}}}$ for bosons 
 whose reasoning will be explained later.
 
 Using Eq.~\eqref{eq:matsubara-lehmann},
-we can analytically continute $G(\iv)$ to the whole complex plane as $G(z)$ for $z\in \mathbb{Z}$.
+we can analytically continute $G(\iv)$ to the whole complex plane as $G(z)$ for $z\in \mathbb{C}$.
 Note that there are poles or a branch cut on the real axis.
 %Using $G_{AB}(z)$, the real-frequency and imaginary-frequency (Matsubara) Green's funcitons are analytically continued as
 The advanced and retarded Green's functions are given by the value of $G_{AB}(z)$ above/below the real axis as
@@ -246,22 +247,48 @@ This can be transformed to the imaginary-time domain as
 \end{align}
 for $0 < \tau<\beta$.
 
-\subsection{Exercise 1}
-Plot Eqs.~\eqref{eq:gz-hubbard-atom} and \eqref{eq:gtau-hubbard-atom} for several different values of $\beta$.
+%\subsection{Exercise 1}
+\begin{Exercise}[label=ex1]
+Plot Eqs.~\eqref{eq:gz-hubbard-atom} and \eqref{eq:gtau-hubbard-atom} for a typical value of $\beta$.
 You will see that $G(\tau)$ changes very rapidly around $\tau=0$ and $\beta$ at large $\beta$.
 Due to the sum rule and the half-filling condition,
 $G_{\sigma\sigma'}(0^+)=G_{\sigma\sigma'}(\beta+0^-) = -1/2$.
 On the other hand, $G(\iv)$ decays only algebraically at high frequencies.
+Your plot should look like Figs.~\ref{fig:gtau-hubbard-atom} and~\ref{fig:giv-hubbard-atom}.
+\end{Exercise}
 
-\subsection{Exercise 2}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\columnwidth]{gtau_hubbard_atom.pdf}
+    \caption{$G(\tau)$ computed for the Hubbard atom with $U=1$ and $\beta=300$.}
+    \label{fig:gtau-hubbard-atom}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\columnwidth]{giv_hubbard_atom.pdf}
+    \caption{$G(\iv)$ computed for the Hubbard atom with $U=1$ and $\beta=300$. The solid curve denotes $-1/\nu$.}
+    \label{fig:giv-hubbard-atom}
+\end{figure}
+
+\begin{Exercise}
 Derive Eq.~\eqref{eq:gtau-hubbard-atom} from Eq.~\eqref{eq:gz-hubbard-atom} using 
 the formula
 \begin{align}
    T\sum_{\nu} \frac{e^{-\iv\tau}}{\iv - \epsilon} &= - \frac{e^{-\epsilon\tau}}{1+e^{-\beta\epsilon}}.\label{eq:single-pole-ft}
 \end{align}
+\end{Exercise}
 
-\subsection{Exercise 3}
+\begin{Exercise}
 Please numerically check how $G(\tau)$ of the Hubbard atom behaves near $\tau=0$ if we truncate the summation in Eq.~\eqref{eq:single-pole-ft} at some frequency.
+The result should look like Fig.~\ref{fig:naive-inverse-transform-hubbard-atom}.
+\end{Exercise}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\columnwidth]{naive_inverse_transform_hubbard_atom.pdf}
+    \caption{Naive inverse transform of $G(\iv)$ for the Hubbard atom with $U=1$ and $\beta=300$. We used 200 positive Matsubara frequencies.}
+    \label{fig:naive-inverse-transform-hubbard-atom}
+\end{figure}
 
 
 \clearpage
@@ -278,7 +305,7 @@ In the imaginary-frequency domain, we use a uniform mesh consisting of the lowes
 \begin{align}
 &\qty{(2n+1)\pi/\beta~| n=-N_\nu, -N_\nu+1, \cdots N_\nu-2, N_\nu-1}.
 \end{align}
-In the imaginary-time domain, we use a uniform mesh: 
+In the imaginary-time domain, we use a uniform mesh,
 \begin{align}
 &\qty{\frac{\beta t}{N_\tau-1}~|~t=0, 1, \cdots, N_\tau-1},
 \end{align}
@@ -286,7 +313,7 @@ where the two end points are interpretated as $0^+$ and $\beta + 0^-$.
 
 Let us discretize some $G(\tau)$ on the uniform mesh as $G_t$ ($t=0, \cdots, N_\tau-1$).
 How many mesh points are sufficient for representing $G(\tau)$ accurately?
-We consider the simplest case, i.e. the hubbard atom Eq.~\eqref{eq:gtau-hubbard-atom}.
+We consider the simplest case, i.e. the Hubbard atom Eq.~\eqref{eq:gtau-hubbard-atom}.
 In this case, $G(\tau)$ can be approximated around $\tau=0$ as
 \begin{align}
     G(\tau) &\propto e^{-\tau U/2}.
@@ -295,18 +322,20 @@ This indicates that we must increase the density of the mesh points proportional
 Considering the band width of the spectrum is $U$, one can see that $N_\tau$ must increase as $O(\beta \wmax)$ in general cases,
 where $\wmax$ is a cutoff frequency of the spectrum: i.e., the spectrum is non-zero only in $[-\wmax, \wmax]$.
 
-The Green's function $G(\tau)$ is known exactly only on the mesh points.
-Thus, we need to \textit{interpolate} the values to evaluate the Green's function in bewetween mesh points.
+The Green's function $G(\tau)$ is known only on the mesh points.
+Thus, we need to \textit{interpolate} the values to evaluate the Green's function in between mesh points.
 An easy way is to use some piecewise polynomial interpolation.
 This is justified by the fact that $G(\tau)$ is a smooth function for $0< \tau<\beta$.
 
-\subsection{Fourier transformation}
-We describe how to Fourier transform numerical data on a uniform mesh in $\tau$ to Matsubara frequencies.
-We first interpolate the numerical value of $G(\tau)$ on a finer mesh in $\tau$, e.g., cubic spline interpolation.
+\subsection{Fourier transform}
+We explain a naive way to transform numerical data on a uniform mesh in $\tau$ to Matsubara frequencies.
+We first interpolate the numerical value of $G(\tau)$ on a finer mesh in $\tau$, e.g., by using cubic spline interpolation.
+Then, we compute
 \begin{align}
-   G(\iv) &\approx \frac{\beta}{N_\tau}\sum_{t=0}^{N_\tau-1} e^{\iv \tau_t} G_t,
+   G(\iv) &\approx \frac{\beta}{N_{\tau'}}\sum_{t=0}^{N_{\tau'}-1} e^{\iv \tau_t} G_t,\label{eq:naive-fourier-transform}
 \end{align}
-where $\tau_t = \frac{\beta t}{N_\tau-1}$ and $G_t$ is the numerical value at $\tau_t$.
+where $\tau_t = \frac{\beta t}{N_{\tau'}-1}$ and $G_t$ is the interpolated value at a grid point and $N_{\tau'} > 2 N_\tau$.
+The RHS of Eq.~\eqref{eq:naive-fourier-transform} converges to the exact value in the limit of $N_\tau \rightarrow \infty$.
 
 
 \clearpage
