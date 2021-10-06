@@ -278,7 +278,7 @@ the formula
 \end{align}
 \end{Exercise}
 
-\begin{Exercise}
+\begin{Exercise}[label=ex:native-inverse-transform]
 Please numerically check how $G(\tau)$ of the Hubbard atom behaves near $\tau=0$ if we truncate the summation in Eq.~\eqref{eq:single-pole-ft} at some frequency.
 The result should look like Fig.~\ref{fig:naive-inverse-transform-hubbard-atom}.
 \end{Exercise}
@@ -292,7 +292,7 @@ The result should look like Fig.~\ref{fig:naive-inverse-transform-hubbard-atom}.
 
 
 \clearpage
-\section{Conventional numerical tools for Green's function}
+\section{Conventional approaches}
 \subsection{Uniform mesh}
 Due to the algebraic decay of $G(\iv)$ and the strong $\tau$ dependence of $G(\tau)$ around $\tau=0$,
 it is a bit cumbersome to treat the Green's function numerically.
@@ -311,7 +311,7 @@ In the imaginary-time domain, we use a uniform mesh,
 \end{align}
 where the two end points are interpretated as $0^+$ and $\beta + 0^-$.
 
-Let us discretize some $G(\tau)$ on the uniform mesh as $G_t$ ($t=0, \cdots, N_\tau-1$).
+Let us consider to discretize a $G(\tau)$ on the uniform mesh as $G_t$ ($t=0, \cdots, N_\tau-1$).
 How many mesh points are sufficient for representing $G(\tau)$ accurately?
 We consider the simplest case, i.e. the Hubbard atom Eq.~\eqref{eq:gtau-hubbard-atom}.
 In this case, $G(\tau)$ can be approximated around $\tau=0$ as
@@ -322,21 +322,108 @@ This indicates that we must increase the density of the mesh points proportional
 Considering the band width of the spectrum is $U$, one can see that $N_\tau$ must increase as $O(\beta \wmax)$ in general cases,
 where $\wmax$ is a cutoff frequency of the spectrum: i.e., the spectrum is non-zero only in $[-\wmax, \wmax]$.
 
-The Green's function $G(\tau)$ is known only on the mesh points.
-Thus, we need to \textit{interpolate} the values to evaluate the Green's function in between mesh points.
-An easy way is to use some piecewise polynomial interpolation.
-This is justified by the fact that $G(\tau)$ is a smooth function for $0< \tau<\beta$.
+\subsection{Interpolation}
+Even if $G(\tau)$ is known only on a discrete set of data points,
+we may want to evaluate it on abitrary points.
+This can be done by interpolating $G(\tau)$ for $0 < \tau < \beta$.
+Popular choices are linear interpolation and cubic spline interpolation.
+The linear interpolation fits the data using linear piecewise polynomials
+and construct new data points within the range of the known data points.
+The cubic spline interpolation uses piecewise polynomials of degree 3.
+We demonstrate them for the Hubbard atom in Fig.~\ref{fig:interpolation-gtau}.
+One can see that the cubic spline interpolation yields better results.
+At an arbitrary point, the interpolation error generally vanishes as $O(h^2)$ and $O(h^4)$
+for the linear and cubic spline interpolation methods, respectively,
+where $h\equiv \beta/N$ and $N$ is the number of data points.
+
+\begin{Exercise}
+    Confirm numerically the scaling of the interpolation error 
+    with respect to $h$ for these two interpolation methods.
+\end{Exercise}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\columnwidth]{interpolation_gtau.pdf}
+    \caption{
+        Linear and cubic spline interpolations of $G(\iv)$ for the Hubbard atom with $U=1$ and $\beta=300$.
+        We used 100 data points.
+        }
+    \label{fig:interpolation-gtau}
+\end{figure}
+
+%
+%Thus, we need to \textit{interpolate} the values to evaluate the Green's function in between mesh points.
+%An easy way is to use some piecewise polynomial interpolation.
+%This is justified by the fact that $G(\tau)$ is a smooth function for $0< \tau<\beta$.
 
 \subsection{Fourier transform}
 We explain a naive way to transform numerical data on a uniform mesh in $\tau$ to Matsubara frequencies.
-We first interpolate the numerical value of $G(\tau)$ on a finer mesh in $\tau$, e.g., by using cubic spline interpolation.
-Then, we compute
+%First, we introduce a quadrature rule for approximating the definite integral of a function.
+First, we introduce quadrature rules.
+A quadrature rule approximates the definite integral over interval $[-1,1]$ as
 \begin{align}
-   G(\iv) &\approx \frac{\beta}{N_{\tau'}}\sum_{t=0}^{N_{\tau'}-1} e^{\iv \tau_t} G_t,\label{eq:naive-fourier-transform}
+   \int_{-1}^1 f(x) dx \simeq \sum_{i=1}^n w_i f(x_i),
 \end{align}
-where $\tau_t = \frac{\beta t}{N_{\tau'}-1}$ and $G_t$ is the interpolated value at a grid point and $N_{\tau'} > 2 N_\tau$.
-The RHS of Eq.~\eqref{eq:naive-fourier-transform} converges to the exact value in the limit of $N_\tau \rightarrow \infty$.
+where $w_i$ is a positive weight and $x_i$ is a node.
+Different quadrature rules use different choices of weights and nodes.
+A popular choice is Gaussian quadrature, which yields accurate results if $f(x)$ can be approximated 
+well by a polynomial of degree $2n-1$ or less.
 
+Using your favarite quadrature rule (and interpolation if nescessary),
+one can Fourier transform numerical data of $G(\tau)$ as
+\begin{align}
+   G(\iv) &\approx \sum_{i=1}^{n} \tilde{w}_i e^{\iv \tau_i} G(\tau_i),\label{eq:naive-fourier-transform}
+\end{align}
+where $\tau_i = (x_i+1)\beta/2$ and $\tilde{w}_i=(\beta/2) w_i$.
+The RHS of Eq.~\eqref{eq:naive-fourier-transform} converges to the exact value in the limit of $n \rightarrow \infty$.
+
+Figure~\ref{fig:fourier-transform-hubbard-atom} show a numerical demonstration of the Fourier transform using Gauss quadrature.
+One can see that the numerical error is very small at low frequencies but the error goes up above some frequency cutoff.
+
+\begin{Exercise}
+    Explain why the procedure fails at high frequencies and 
+    figure out what determines the cutoff frequency.
+\end{Exercise}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\columnwidth]{fourier_transform_hubbard_atom.pdf}
+    \caption{
+        Fourier transformation from $G(\tau)$ to $G(\iv)$ for the Hubbard atom with $U=1$ and $\beta=300$.
+        We used Gauss quadrature with $n=1000$.
+        }
+    \label{fig:fourier-transform-hubbard-atom}
+\end{figure}
+
+%We first interpolate the numerical value of $G(\tau)$ on a finer mesh in $\tau$, e.g., by using cubic spline interpolation.
+%Then, we compute
+%\begin{align}
+   %G(\iv) &\approx \frac{\beta}{N_{\tau'}}\sum_{t=0}^{N_{\tau'}-1} e^{\iv \tau_t} G_t,\label{eq:naive-fourier-transform}
+%\end{align}
+%where $\tau_t = \frac{\beta t}{N_{\tau'}-1}$ and $G_t$ is the interpolated value at a grid point and $N_{\tau'} > 2 N_\tau$.
+
+\subsection{Inverse Fourier transform}
+Another tricky thing is inverse Fourer transform of $G(\iv)$ to $G(\tau)$.
+As we have already seen in Exercise~\ref{ex:native-inverse-transform},
+the naive inverse Fourier traformation does not work at all.
+In this subsection, we explain a simple procedure to avoid this problem.
+If the first moment of the high-frequency expansion is exactly known,
+we can substract the first term of the expansion from $G(\iv)$ as
+\begin{align}
+    \tilde{G}(\iv) &\equiv G(\iv) - \frac{c^0}{\iv}.
+\end{align}
+A native inverse Fourier transformation of $\tilde{G}(\iv)$ is safer than that of $G(\iv)$ because 
+$\tilde{G}(\iv)$ has only a slope discontinuity in the $\tau$ domain.
+For $0 < \tau<\beta$,
+\begin{align}
+    G(\tau) &\approx \sum_{n=-n_\mathrm{max}}^{n_\mathrm{max}} e^{\ii \nu_n \tau }\tilde{G}(\iv) - \frac{c^0}{2},\label{eq:inverse-transform-c0}
+\end{align}
+where $\nu_n = (2n+1)\pi/\beta$.
+The inverse Fourier transforms of higher-order terms can be found in Appendix B of the E. Gull's Ph. D thesis.
+
+\begin{Exercise}
+    Implement Eq.~\eqref{eq:inverse-transform-c0} for the Hubbard model and confirm that the discontinuity at $\tau=0$ is correctly reproduced.
+\end{Exercise}
 
 \clearpage
 \section{Sparse modeling approach}
