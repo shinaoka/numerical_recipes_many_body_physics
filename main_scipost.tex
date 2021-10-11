@@ -11,16 +11,7 @@
 \usepackage{pythonhighlight}
 \usepackage{exercise}
 
-
 \definecolor{LightGray}{rgb}{0.9, 0.9, 0.9}
-%\definecolor{mycolor}{rgb}{0, 0.5, 0}
-%\newcommand{\JO}[1]{{\color{mycolor}#1}}
-%\newcommand{\KY}[1]{{\color{magenta}#1}}
-%\newcommand{\HS}[1]{{\color{red}#1}}
-%\newcommand{\TN}[1]{{\color{blue}#1}}
-%\newcommand{\delete}[1]{{\color[gray]{0.7}#1}}
-%\newcommand\NEEDCITE{[REF?]}
-
 
 \newcommand{\hatd}{{\ensuremath{\hat{d}}}}
 \newcommand{\hatc}{{\ensuremath{\hat{c}}}}
@@ -103,7 +94,7 @@ This lecture note reviews ....
 \section{Green's functions}
 \subsection{Fermionic and bosonic correlation functions}
 %One-particle Green's functions represent one-particle responses of an equilibrium state.
-We define retarded/advanced/imaginary-time correlatin functions as
+We define retarded/advanced/imaginary-time correlation functions as
 \begin{align}
 	G^\mathrm{R}(t-t') &= -\ii \theta(t-t')\expval{A(t)B(t')\mp B(t')A(t)},\\
 	G^\mathrm{A}(t-t') &= -\ii \theta(t'-t)\expval{A(t)B(t')\mp B(t')A(t)},\\
@@ -134,7 +125,7 @@ In the grand canonical ensemble, $G(\iv)$ has the Lehmann representation:
 \begin{align}
     G_{AB}(\iv) &= \int \dd \omega \frac{\rho_{AB}(\omega)\omega^{\delta_{\alpha,\mathrm{B}}}}{\iv - \omega},\\
     \rho_{AB}(\omega) &\equiv -\frac{1}{\pi\omega^\delta_{\alpha,\mathrm{B}}} \imaginary G_{AB}(\omega + 0^+)\\
-    & = \sum_{mn}(e^{-\beta E_n} \mp e^{-\beta E_m})
+    & = \frac{1}{Z}\sum_{mn}(e^{-\beta E_n} \mp e^{-\beta E_m})
     \mel{n}{A}{m}\mel{m}{B}{n}
     \delta(\omega - (E_m-E_n)),\label{eq:matsubara-lehmann}
 \end{align}
@@ -144,7 +135,7 @@ We introduced the extra factor $\omega^{\delta_{\alpha,\mathrm{B}}}$ for bosons 
 whose reasoning will be explained later.
 
 Using Eq.~\eqref{eq:matsubara-lehmann},
-we can analytically continute $G(\iv)$ to the whole complex plane as $G(z)$ for $z\in \mathbb{C}$.
+we can analytically continue $G(\iv)$ to the whole complex plane as $G(z)$ for $z\in \mathbb{C}$.
 Note that there are poles or a branch cut on the real axis.
 %Using $G_{AB}(z)$, the real-frequency and imaginary-frequency (Matsubara) Green's funcitons are analytically continued as
 The advanced and retarded Green's functions are given by the value of $G_{AB}(z)$ above/below the real axis as
@@ -175,12 +166,12 @@ In particular, one can show
 
 \subsection{Fermionic one-particle Green's function}
 We focus on the fermionic cases where $A$ and $B$ are annihilation and creation operators of fermions, respectively.
-In such cases, the correaltion is called ``(one-particle) Green's function''.
-The Lehmann represention of the Green's function reads
+In such cases, the correlation is called ``(one-particle) Green's function''.
+The Lehmann representation of the Green's function reads
 \begin{align}
     G_{ab}(\iv) &= \int \dd \omega \frac{\rho_{ab}(\omega)}{\iv - \omega},\\
     \rho_{AB}(\omega) &\equiv -\frac{1}{\pi} \imaginary G_{ab}(\omega + 0^+)\\
-    & = \sum_{mn}(e^{-\beta E_n} + e^{-\beta E_m})
+    & = \frac{1}{Z}\sum_{mn}(e^{-\beta E_n} + e^{-\beta E_m})
     \mel{n}{c^\dagger_a}{m}\mel{m}{c_b}{n}
     \delta(\omega - (E_m-E_n)),\label{eq:matsubara-g-lehmann}
 \end{align}
@@ -204,12 +195,12 @@ In particular, one can show
    c^{0}_{ab} &= \poissonbracket{c_a}{c^\dagger_b} = \delta_{ab}.
 \end{align}
 
-This clearly indicates that the Green's function has a discontity at $\tau=0,\pm \beta, \pm 2\beta$ for $a=b$.
-At these points, the off-diagonal components ($a\neq b$) have a slope discontity or a discontity in higher-order derivatives.
+This clearly indicates that the Green's function has a discontinuity at $\tau=0,\pm \beta, \pm 2\beta$ for $a=b$.
+At these points, the off-diagonal components ($a\neq b$) have a slope discontinuity or a discontinuity in higher-order derivatives.
 For $0 <\tau < \beta$, the Green's function is a smooth and analytic function.
 %
 %The sum rules is followed by $c_{ab}^1 = \delta_{ab}$.
-%The slow power-law decay originates from the discontity of $G(\tau)$ and its derivatives at $\tau=0,\pm \beta, \pm 2\beta, \cdots$.
+%The slow power-law decay originates from the discontinuity of $G(\tau)$ and its derivatives at $\tau=0,\pm \beta, \pm 2\beta, \cdots$.
 %\
 %
 %Below, we summarize the analytic properties of the fermionic Green's function.
@@ -239,10 +230,10 @@ By simple calculations, one obtains
 where $\sigma$ and $\sigma'$ are spin indices.
 This can be transformed to the imaginary-time domain as
 \begin{align}
-    G_{\sigma\sigma'}(\tau) &= \frac{1}{2}
+    G_{\sigma\sigma'}(\tau) &= -\frac{1}{2}
     \qty(
         \frac{e^{-\tau U/2}}{1+e^{-\beta U/2}} +
-        \frac{e^{\tau U/2}}{1+e^{-\beta U/2}}
+        \frac{e^{\tau U/2}}{1+e^{\beta U/2}}
     )\delta_{\sigma\sigma'}\label{eq:gtau-hubbard-atom}
 \end{align}
 for $0 < \tau<\beta$.
@@ -309,7 +300,7 @@ In the imaginary-time domain, we use a uniform mesh,
 \begin{align}
 &\qty{\frac{\beta t}{N_\tau-1}~|~t=0, 1, \cdots, N_\tau-1},
 \end{align}
-where the two end points are interpretated as $0^+$ and $\beta + 0^-$.
+where the two end points are interpreted as $0^+$ and $\beta + 0^-$.
 
 Let us consider to discretize a $G(\tau)$ on the uniform mesh as $G_t$ ($t=0, \cdots, N_\tau-1$).
 How many mesh points are sufficient for representing $G(\tau)$ accurately?
@@ -324,7 +315,7 @@ where $\wmax$ is a cutoff frequency of the spectrum: i.e., the spectrum is non-z
 
 \subsection{Interpolation}
 Even if $G(\tau)$ is known only on a discrete set of data points,
-we may want to evaluate it on abitrary points.
+we may want to evaluate it on arbitrary points.
 This can be done by interpolating $G(\tau)$ for $0 < \tau < \beta$.
 Popular choices are linear interpolation and cubic spline interpolation.
 The linear interpolation fits the data using linear piecewise polynomials
@@ -369,7 +360,7 @@ Different quadrature rules use different choices of weights and nodes.
 A popular choice is Gaussian quadrature, which yields accurate results if $f(x)$ can be approximated 
 well by a polynomial of degree $2n-1$ or less.
 
-Using your favarite quadrature rule (and interpolation if nescessary),
+Using your favorite quadrature rule (and interpolation if necessary),
 one can Fourier transform numerical data of $G(\tau)$ as
 \begin{align}
    G(\iv) &\approx \sum_{i=1}^{n} \tilde{w}_i e^{\iv \tau_i} G(\tau_i),\label{eq:naive-fourier-transform}
@@ -383,6 +374,7 @@ One can see that the numerical error is very small at low frequencies but the er
 \begin{Exercise}
     Explain why the procedure fails at high frequencies and 
     figure out what determines the cutoff frequency.
+    How can we improve on it? (Hint: see Section~\ref{sec:inverse-fourier-transform}).
 \end{Exercise}
 
 \begin{figure}
@@ -402,13 +394,13 @@ One can see that the numerical error is very small at low frequencies but the er
 %\end{align}
 %where $\tau_t = \frac{\beta t}{N_{\tau'}-1}$ and $G_t$ is the interpolated value at a grid point and $N_{\tau'} > 2 N_\tau$.
 
-\subsection{Inverse Fourier transform}
-Another tricky thing is inverse Fourer transform of $G(\iv)$ to $G(\tau)$.
+\subsection{Inverse Fourier transform}\label{sec:inverse-fourier-transform}
+Another tricky thing is inverse Fourier transform of $G(\iv)$ to $G(\tau)$.
 As we have already seen in Exercise~\ref{ex:native-inverse-transform},
-the naive inverse Fourier traformation does not work at all.
+the naive inverse Fourier transform does not work at all.
 In this subsection, we explain a simple procedure to avoid this problem.
 If the first moment of the high-frequency expansion is exactly known,
-we can substract the first term of the expansion from $G(\iv)$ as
+we can subtract the first term of the expansion from $G(\iv)$ as
 \begin{align}
     \tilde{G}(\iv) &\equiv G(\iv) - \frac{c^0}{\iv}.
 \end{align}
@@ -421,15 +413,19 @@ For $0 < \tau<\beta$,
 where $\nu_n = (2n+1)\pi/\beta$.
 The inverse Fourier transforms of higher-order terms can be found in Appendix B of the E. Gull's Ph. D thesis.
 
+The computation complexity of the naive implementation of Eq.~\eqref{eq:inverse-transform-c0} scales as $O(N_\tau n_\mathrm{max})$.
+This can be greatly reduced to $O(N\log N)$ for $N=N_\tau \propto n_\mathrm{max}$ by using fast Fourier transform.
+However, we do not describe it because the sparse sampling approach is far more efficient anyway.
+
 \begin{Exercise}
-    Implement Eq.~\eqref{eq:inverse-transform-c0} for the Hubbard model and confirm that the discontinuity at $\tau=0$ is correctly reproduced.
+    Implement Eq.~\eqref{eq:inverse-transform-c0} for the Hubbard atom and confirm that the discontinuity at $\tau=0$ is correctly reproduced.
 \end{Exercise}
 
 \clearpage
 \section{Sparse modeling approach}
 We refer the reader to Ref.~\ref{lecture_note_ir} for the description of
 the IR basis and the sparse sampling method.
-In this section, we provide only supplementary information on these techknologies that is not reviewed in the lecture note.
+In this section, we provide only supplementary information on these technologies that is not reviewed in the lecture note.
 We use the same notation as used in the lecture.
 
 \subsection{Bosonic IR basis}
