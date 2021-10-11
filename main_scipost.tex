@@ -425,6 +425,20 @@ The inverse Fourier transforms of higher-order terms can be found in Appendix B 
     Implement Eq.~\eqref{eq:inverse-transform-c0} for the Hubbard model and confirm that the discontinuity at $\tau=0$ is correctly reproduced.
 \end{Exercise}
 
+
+\clearpage
+\section{Legendre basis}
+L. Boehnke and co-workers proposed a more compact representation of the Matsubara/imaginary-time Green's functions, the so-called Legendre basis~\cite{Boehnke:2011dd}.
+They proposed to expand $G(\tau)$ for $0<\tau<\beta$ as
+\begin{align}
+    G(\tau) &= \sum_{l=0}^\infty \frac{\sqrt{2l+1}}{\beta} P_l(x(\tau)) G_l,\\
+    G_l &= \sqrt{2l+1} \int_0^\beta d\tau P_l(x(\tau)) G(\tau),
+\end{align}
+where $x(\tau) = 2\tau/\beta -1$ and $G_l$ are expansion coefficients.
+Because $G(\tau)$ is a smooth function for $0 < \tau < \beta$, the expansion coefficients $G_l$ generally decay exponentially.
+
+
+
 \clearpage
 \section{Sparse modeling approach}
 We refer the reader to Ref.~\ref{lecture_note_ir} for the description of
