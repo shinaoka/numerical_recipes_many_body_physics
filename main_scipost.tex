@@ -424,16 +424,56 @@ However, we do not describe it because the sparse sampling approach is far more 
 
 \clearpage
 \section{Legendre basis}
+\subsection{Definition}
 L. Boehnke and co-workers proposed a more compact representation of the Matsubara/imaginary-time Green's functions, the so-called Legendre basis~\cite{Boehnke:2011dd}.
 They proposed to expand $G(\tau)$ for $0<\tau<\beta$ as
 \begin{align}
-    G(\tau) &= \sum_{l=0}^\infty \frac{\sqrt{2l+1}}{\beta} P_l(x(\tau)) G_l,\\
+    G(\tau) &= \sum_{l=0}^\infty \frac{\sqrt{2l+1}}{\beta} P_l(x(\tau)) G_l,\label{eq:legendre-gtau}\\
     G_l &= \sqrt{2l+1} \int_0^\beta d\tau P_l(x(\tau)) G(\tau),
 \end{align}
 where $x(\tau) = 2\tau/\beta -1$ and $G_l$ are expansion coefficients.
 Because $G(\tau)$ is a smooth function for $0 < \tau < \beta$, the expansion coefficients $G_l$ generally decay exponentially.
 
+$P_n(x)$ is a polynomial of degree $n$.
+Legendre polynomials form an orthogonal system with respect to weight function 1 over the interval $[-1,1]$.
+The Legendre polynomials satisfy the orthogonality condition
+\begin{align}
+    \int d x P_m(x) P_l(x) = \frac{2}{2n+1} \delta_{mn},
+\end{align}
+and the recursion formula
+\begin{align}
+    (n+1)P_{n+1}(x) &= (2n+1) x P_n(x) - n P_{n-1}(x).
+\end{align}
+The recursion formula can be used to evaluate the Legendre polynomials at given $x$.
+The first few Legendre polynomials are 
+\begin{align}
+    P_0(x) &= 1,\\
+    P_1(x) &= x,\\
+    P_2(x) &= \frac{1}{2}(3x^2-1).
+\end{align}
 
+$P_n(x)$ has exactly distinct $n$ roots $\{x_0,x_1,\cdots, x_{n-1}\}$ in the interval $[-1,1]$,
+where $x_0 < x_1 < \cdots < x_{n-1}$.
+It is known that $1-x_0 \propto l^{-2}$ at large $l$.
+We now assume that $G(\tau)$ decays as $G(\tau) \propto e^{-W\tau}$.
+To resolve this feature in the expansion using the Legendre basis,
+the number of basis functions must satisfy $N \propto \sqrt{\beta}$.
+A more detailed discussion is found in Appendix B of Ref.~\cite{Chikano:2018gd}.
+%P. Nevai, Orthogonal polynomials, Mem. Amer. Math. Soc. 213 (1979).
+
+The Fourier transform of Eq.~\eqref{eq:legendre-gtau} is given by
+\begin{align}
+    G(\iv) &= \sum_{l=0}^\infty T_{nl} G_l,
+\end{align}
+where
+\begin{align}
+    T_{nl} &\equiv \frac{\sqrt{2l+1}}{\beta} \int_0^\beta d\tau e^{\iv \tau} P_l(x(\tau))\nonumber\\
+    &= (-1)^n \ii^{l+1} \sqrt{2l+1}j_l(m\pi/2),
+\end{align}
+with $j_l(z)$ denoting the spherical Bessel functions and $\nu = m \pi/\beta$.
+Bosonic/fermionic Matsubara frequencies are denoted by even/odd $m$.
+
+\subsection{Numerical examples}
 
 \clearpage
 \section{Sparse modeling approach}
