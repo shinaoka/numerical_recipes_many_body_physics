@@ -451,10 +451,25 @@ The first few Legendre polynomials are
     P_1(x) &= x,\\
     P_2(x) &= \frac{1}{2}(3x^2-1).
 \end{align}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\columnwidth]{legendre_polynomials.pdf}
+    \caption{Legendre polynomials}
+    \label{fig:legendre_polynomials}
+\end{figure}
 
-$P_n(x)$ has exactly distinct $n$ roots $\{x_0,x_1,\cdots, x_{n-1}\}$ in the interval $[-1,1]$,
-where $x_0 < x_1 < \cdots < x_{n-1}$.
-It is known that $1-x_0 \propto l^{-2}$ at large $l$.
+$P_n(x)$ has exactly distinct $n$ roots $\{x_{\nu n}\}$ ($\nu=1,\cdots,n$) in the interval $[-1,1]$.
+The properties of the roots (zeros) have been investigated extensively in the literature.
+One nice property is 
+\begin{align}
+    \frac{\nu-1/4}{n+1/2} \pi < \theta_{\nu n} < \frac{\nu}{n+1}\pi
+\end{align}
+for $1 \le \nu \le n/2$ and $x_{\nu n} = \cos \theta_{\nu n}$~\cite{Szego.1936.Szego}.
+Thus, the position of the root closest to 1, which coressponds to $\tau=\beta$, scales as
+\begin{align}
+    1-x_{1 n} &\approx \frac{1}{2}\theta_{1 n}^2 \propto 1/n^2
+\end{align}
+for $n\rightarrow +\infty$.
 We now assume that $G(\tau)$ decays as $G(\tau) \propto e^{-W\tau}$.
 To resolve this feature in the expansion using the Legendre basis,
 the number of basis functions must satisfy $N \propto \sqrt{\beta}$.
@@ -474,6 +489,37 @@ with $j_l(z)$ denoting the spherical Bessel functions and $\nu = m \pi/\beta$.
 Bosonic/fermionic Matsubara frequencies are denoted by even/odd $m$.
 
 \subsection{Numerical examples}
+We now demonstrate the accuracy of the Legendre basis for the same model (Hubbard atom, $\beta=300$).
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\columnwidth]{legendre_hubbard_atom.pdf}
+    \caption{
+        Expansion coefficients in the Legendre basis computed
+        for the Hubbard atom with $U=1$ and $\beta=300$.
+        }
+    \label{fig:legendre-hubbard-atom}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\columnwidth]{legendre_matsu_hubbard_atom.pdf}
+    \caption{
+        $G(\iv)$ reconstructed from the expansion coefficients in the Legendre basis
+        for the Hubbard atom with $U=1$ and $\beta=300$ (see Fig.~\ref{fig:legendre-hubbard-atom}).
+        }
+    \label{fig:legendre-matsu-hubbard-atom}
+\end{figure}
+
+
+\begin{Exercise}
+    Compute expansion coefficients of the Green's function of the Hubbard atom
+    for lower temperatures.
+    Check how the number of basis functions scales with respect to $beta$.
+\end{Exercise}
+
+
 
 \clearpage
 \section{Sparse modeling approach}
@@ -633,7 +679,7 @@ We define Fourier transfrom between the real space and the momentum space as
 \begin{appendix}
 \end{appendix}
 
-%\bibliography{ref,misc}
+\bibliography{ref,misc}
 
 \nolinenumbers
 
