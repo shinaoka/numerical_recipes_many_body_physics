@@ -523,10 +523,25 @@ We now demonstrate the accuracy of the Legendre basis for the same model (Hubbar
 
 \clearpage
 \section{Sparse modeling approach}
-We refer the reader to Ref.~\ref{lecture_note_ir} for the description of
+We refer the reader to Ref.~\cite{shinaoka2021efficient} for the technical details of
 the IR basis and the sparse sampling method.
-In this section, we provide only supplementary information on these technologies that is not reviewed in the lecture note.
-We use the same notation as used in the lecture.
+Before going into technical details, we intuitevly show 
+that numerical data of imaginary Green's funcitons are highly compressible.
+
+\subsection{Analytic continuation of numerical data in imaginary-time data}
+As shown in Eq.~\eqref{eq:matsubara-lehmann},
+the Green's function $G(\tau)$ is related with the corresponding spectral function.
+In many numerical calcualtions, what we compute is the imaginary-time Green's function $G(\tau)$.
+But, we want to ``reconstruct'' the corresponding spectral function from the numerical data of $G(\tau)$.
+Can we simply invert the integral equation in Eq~\eqref{eq:matsubara-lehmann}?
+No, we cannot.
+This is a well-known infamous ill-posed inverse problem.
+
+
+
+
+%In this section, we provide only supplementary information on these technologies that is not reviewed in the lecture note.
+%We use the same notation as used in the lecture.
 
 \subsection{Bosonic IR basis}
 %The bosonic IR basis is defined in terms of the SVD of the bosonic kernel
