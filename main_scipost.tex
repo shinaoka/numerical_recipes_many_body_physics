@@ -537,6 +537,65 @@ Can we simply invert the integral equation in Eq~\eqref{eq:matsubara-lehmann}?
 No, we cannot.
 This is a well-known infamous ill-posed inverse problem.
 
+To illustrate this problem, we show two spectral functions in Fig.~\ref{fig:three_gaussian}.
+The original spectral function consists of three Gaussian peaks,
+while the second one denoted by the broken line is slighly broaden and is not even non-negative.
+
+We now transform these spectral functions to $\tau$ using
+\begin{align}
+    G(\tau) &= - \int_{-\omega_\mathrm{max}}^{\omega_\mathrm{max}}d\tau K^\mathrm{F}(\tau, \omega) \rho(\omega),
+\end{align}
+where
+$$
+K^\mathrm{F}(\tau, \omega) = \frac{e^{-\tau\omega}}{1+e^{-\beta\omega}}.
+$$
+We compare the obtain results in Fig.~\ref{fig:three_gaussian_gtau}.
+Although the two spectral functions are significantly different, 
+the two Green's functions agree within an accuracy of $10^{-5}$.
+Why is $G(\tau)$ insensitive to changes in $\rho(\omega)$?
+This originates from some special properites of the kernel.
+
+We now discretize the kernel using uniform meshes
+($[-\omega_\mathrm{max}, \omega_\mathrm{max}]$ and $[0,\beta]$).
+We set the number of mesh points to $N_\omega = N_\tau=1000$.
+Then, we perform the SVD of the obtained matrix $\boldsymbol{K}$ as
+\begin{align}
+    \boldsymbol{K} &= \boldsymbol{U} \boldsymbol{S} \boldsymbol{V}^\dagger,
+\end{align}
+where $\boldsymbol{U}$ and $\boldsymbol{V}$ are matrices consisting of singular vectors
+and $\boldsymbol{S}$ is a diagonal matrix consisting of the correpsonding singular values $s_i$ ($\ge 0$).
+Figure~\ref{fig:kf-singular-vals} plots the largest 30 singular values computed for $\wmax=10$ and $\beta=10$.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\columnwidth]{three_gaussian.pdf}
+    \caption{
+      Spectral functions consisting of three Gaussian peaks.
+      The solid line denotes the original spectral function.
+      The broken line denotes the reconstructed one by analytic continuation (see the text).
+    }
+    \label{fig:three_gaussian}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\columnwidth]{three_gaussian_gtau.pdf}
+    \caption{
+      Green's functions transformed from the two spectral functions in Fig.~\ref{fig:three_gaussian}
+      for $\beta=10$.
+      }
+    \label{fig:three_gaussian_gtau}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\columnwidth]{kf_singular_vals.pdf}
+    \caption{
+    Singular values of the fermionic kernel discretized using $N_\omega=N_\tau=1000$ for $\wmax=\beta=10$.
+    We plot only the first 30 singular values.
+    }
+    \label{fig:kf-singular-vals}
+\end{figure}
 
 
 
