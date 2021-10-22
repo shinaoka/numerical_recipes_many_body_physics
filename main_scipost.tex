@@ -21,9 +21,11 @@
 
 \newcommand{\bx}{\bm{x}}
 \newcommand{\by}{\bm{y}}
-\newcommand{\bS}{S}
-\newcommand{\bU}{U}
-\newcommand{\bV}{V}
+\newcommand{\bS}{\bm{S}}
+\newcommand{\bU}{\bm{U}}
+\newcommand{\bV}{\bm{V}}
+\newcommand{\bu}{\bm{u}}
+\newcommand{\bv}{\bm{v}}
 \newcommand{\bK}{K}
 \newcommand{\brho}{\bm{\rho}}
 \newcommand{\bG}{\bm{G}}
@@ -543,7 +545,7 @@ while the second one denoted by the broken line is slighly broaden and is not ev
 
 We now transform these spectral functions to $\tau$ using
 \begin{align}
-    G(\tau) &= - \int_{-\omega_\mathrm{max}}^{\omega_\mathrm{max}}d\tau K^\mathrm{F}(\tau, \omega) \rho(\omega),
+    G(\tau) &= - \int_{-\omega_\mathrm{max}}^{\omega_\mathrm{max}}d\tau K^\mathrm{F}(\tau, \omega) \rho(\omega),\label{eq:anacont-f}
 \end{align}
 where
 $$
@@ -556,7 +558,10 @@ Why is $G(\tau)$ insensitive to changes in $\rho(\omega)$?
 This originates from some special properites of the kernel.
 
 We now discretize the kernel using uniform meshes
-($[-\omega_\mathrm{max}, \omega_\mathrm{max}]$ and $[0,\beta]$).
+($[-\omega_\mathrm{max}, \omega_\mathrm{max}]$ and $[0,\beta]$) as
+\begin{align}
+   (\bK)_{ij} &\equiv \frac{2\wmax}{N_\omega}K(\tau_i, \omega_j).
+\end{align}
 We set the number of mesh points to $N_\omega = N_\tau=1000$.
 Then, we perform the SVD of the obtained matrix $\boldsymbol{K}$ as
 \begin{align}
@@ -565,6 +570,26 @@ Then, we perform the SVD of the obtained matrix $\boldsymbol{K}$ as
 where $\boldsymbol{U}$ and $\boldsymbol{V}$ are matrices consisting of singular vectors
 and $\boldsymbol{S}$ is a diagonal matrix consisting of the correpsonding singular values $s_i$ ($\ge 0$).
 Figure~\ref{fig:kf-singular-vals} plots the largest 30 singular values computed for $\wmax=10$ and $\beta=10$.
+
+We denote the column vectors of $\bU$ and $\bV$ associated with the singular value $s_i$
+by $\bu_i$ and $\bv_i$ ($i=1,2,\cdots$).
+Then, Eq.~\eqref{eq:anacont-f} can be transformed into
+\begin{align}
+    g_i = - s_i \rho_i,
+\end{align}
+where
+\begin{align}
+    g_i    &= u_i^\dagger \bm{g},\\
+    \rho_i &= v_i^\dagger \bm{\rho}.
+\end{align}
+Here, $\bm{g}$ and $\bm{\rho}$ are the column vectors consisting of the values of $G(\tau)$ and $\rho(\omega)$ on the mesh points.
+
+Figure~\ref{fig:gi_rhoi} shows the two spectral functions and the associated $G(\tau)$ projected on the singular vectors.
+Now you can see that the ``reconstructed'' spectral function agree with the original one up to $i=12$.
+Although $\rho_i$ does not decay exponentially (due to the finite-size effects of $N_\omega$),
+$g_i$ decay exponentially due to the singular values.
+This is why $G(\tau)$ associated with the ``reconstructed'' spectral function
+matches the original one well.
 
 \begin{figure}
     \centering
@@ -597,6 +622,36 @@ Figure~\ref{fig:kf-singular-vals} plots the largest 30 singular values computed 
     \label{fig:kf-singular-vals}
 \end{figure}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\columnwidth]{kf_singular_vectors.pdf}
+    \caption{
+        Singular vectors associated with the singular values in Fig.~\ref{fig:kf-singular-vals}.
+    }
+    \label{fig:kf-singular-vectors}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\columnwidth]{gi_rhoi.pdf}
+    \caption{
+      Two spectral functions in Fig.~\ref{fig:three_gaussian}
+      and the associated Green's functions projected onto the singular vectors.
+      }
+    \label{fig:gi_rhoi}
+\end{figure}
+
+
+
+
+
+\begin{Exercise}
+    Genearate another spectural function by taking more singular vectors.
+    What happens if we take too many singular vectors?
+\end{Exercise}
+
+
+\clearpage
 
 
 %In this section, we provide only supplementary information on these technologies that is not reviewed in the lecture note.
