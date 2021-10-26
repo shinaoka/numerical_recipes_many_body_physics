@@ -125,16 +125,16 @@ We defined $\beta = 1/T$ ($k_\mathrm{B}=1$).
 
 In the grand canonical ensemble, $G(\iv)$ has the Lehmann representation:
 \begin{align}
-    G_{AB}(\iv) &= \int \dd \omega \frac{\rho_{AB}(\omega)\omega^{\delta_{\alpha,\mathrm{B}}}}{\iv - \omega},\\
-    \rho_{AB}(\omega) &\equiv -\frac{1}{\pi\omega^\delta_{\alpha,\mathrm{B}}} \imaginary G_{AB}(\omega + 0^+)\\
+    G_{AB}(\iv) &= \int \dd \omega \frac{\rho_{AB}(\omega)}{\iv - \omega},\\
+    \rho_{AB}(\omega) &\equiv -\frac{1}{\pi} \imaginary G_{AB}(\omega + 0^+)\\
     & = \frac{1}{Z}\sum_{mn}(e^{-\beta E_n} \mp e^{-\beta E_m})
     \mel{n}{A}{m}\mel{m}{B}{n}
     \delta(\omega - (E_m-E_n)),\label{eq:matsubara-lehmann}
 \end{align}
 where
 $n$, $m$ run over all eigenstates of the system ($E_{m/n}$ denotes an eigenvalue).
-We introduced the extra factor $\omega^{\delta_{\alpha,\mathrm{B}}}$ for bosons ($\alpha$ represents the staistics),
-whose reasoning will be explained later.
+%We introduced the extra factor $\omega^{\delta_{\alpha,\mathrm{B}}}$ for bosons ($\alpha$ represents the staistics),
+%whose reasoning will be explained later.
 
 Using Eq.~\eqref{eq:matsubara-lehmann},
 we can analytically continue $G(\iv)$ to the whole complex plane as $G(z)$ for $z\in \mathbb{C}$.
@@ -165,6 +165,8 @@ In particular, one can show
    c^{(1)}_{AB} &= \poissonbracket{A}{B}.
 \end{align}
 
+\subsection{Imaginary-time representation}
+\textcolor{red}{Write it!}
 
 \subsection{Fermionic one-particle Green's function}
 We focus on the fermionic cases where $A$ and $B$ are annihilation and creation operators of fermions, respectively.
@@ -658,6 +660,7 @@ matches the original one well.
 \section{Intermediate representation (IR)}
 %The bosonic IR basis is defined in terms of the SVD of the bosonic kernel
 We now sophisticate the ideas of the SVD presented in the previous section.
+\subsection{Fermionic case}
 The so-called intermediate representation (IR) basis functions are defined in terms of singular value expansion as
 \begin{equation}
     K^\mathrm{F}(\tau,\omega')=
@@ -672,16 +675,17 @@ In practice, one can solve this integral equation by projecting the equation ont
 such as piecewise Legendre polynomials~\cite{Chikano:2018gd}.
 The user however does not have to implement a solver because a well-tested Python implementation is available~\cite{irbasis3}.
 
-We consider a bosonic correlation function
-\begin{equation}
-    \hat{G}(\iw)=\int_0^\beta\dd{\tau}\ee^{\iw\tau}\langle T_{\tau}A(\tau)B(0)\rangle,\label{eq:giwdef}
-\end{equation}
-where $A$ and $B$ are bosonic operators.
-Its Lehmann representation function reads
-\begin{equation}
-    \hat{G}(\iw)=\int_{-\wmax}^\wmax\dd{\omega'} K^\mathrm{B}(\iw,\omega')\rho(\omega'),
-\end{equation}
-where the bosonic kernel is defined by
+\subsection{Bosonic case}
+%We consider a bosonic correlation function
+%\begin{equation}
+    %\hat{G}(\iw)=\int_0^\beta\dd{\tau}\ee^{\iw\tau}\langle T_{\tau}A(\tau)B(0)\rangle,\label{eq:giwdef}
+%\end{equation}
+%where $A$ and $B$ are bosonic operators.
+%Its Lehmann representation function reads
+%\begin{equation}
+    %\hat{G}(\iw)=\int_{-\wmax}^\wmax\dd{\omega'} K^\mathrm{B}(\iw,\omega')\rho(\omega'),
+%\end{equation}
+%where the bosonic kernel is defined by
 \begin{align}
     K^\mathrm{B}(\iw, \omega') &= \frac{\omega'}{\iw-\omega'}.\label{eq:KB-matsu}
 \end{align}
