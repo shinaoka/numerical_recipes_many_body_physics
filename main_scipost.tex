@@ -657,8 +657,15 @@ matches the original one well.
 %In this section, we provide only supplementary information on these technologies that is not reviewed in the lecture note.
 %We use the same notation as used in the lecture.
 
-\subsection{Bosonic IR basis}
+\subsection{Intermediate representation (IR)}
 %The bosonic IR basis is defined in terms of the SVD of the bosonic kernel
+We now sophisticate the ideas of the SVD presented in the previous subsection.
+The so-called intermediate representation (IR) basis functions are defined in terms of singular value expansion as
+\begin{equation}
+    K^\mathrm{F}(\tau,\omega')=
+    \sum_{l=0}^\infty U_l(\tau)S_l V_l(\omega').\label{eq:sve-tau}
+\end{equation}
+
 We consider a bosonic correlation function
 \begin{equation}
     \hat{G}(\iw)=\int_0^\beta\dd{\tau}\ee^{\iw\tau}\langle T_{\tau}A(\tau)B(0)\rangle,\label{eq:giwdef}
