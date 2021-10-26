@@ -524,13 +524,11 @@ We now demonstrate the accuracy of the Legendre basis for the same model (Hubbar
 
 
 \clearpage
-\section{Sparse modeling approach}
-We refer the reader to Ref.~\cite{shinaoka2021efficient} for the technical details of
-the IR basis and the sparse sampling method.
-Before going into technical details, we intuitevly show 
-that numerical data of imaginary Green's funcitons are highly compressible.
-
-\subsection{Analytic continuation of numerical data in imaginary-time data}
+\section{Analytic continuation of numerical data in imaginary time}
+%We refer the reader to Ref.~\cite{shinaoka2021efficient} for the technical details of
+%the IR basis and the sparse sampling method.
+%Before going into technical details, we intuitevly show 
+In this section, we show that numerical data of imaginary Green's funcitons are highly compressible.
 As shown in Eq.~\eqref{eq:matsubara-lehmann},
 the Green's function $G(\tau)$ is related with the corresponding spectral function.
 In many numerical calcualtions, what we compute is the imaginary-time Green's function $G(\tau)$.
@@ -657,14 +655,22 @@ matches the original one well.
 %In this section, we provide only supplementary information on these technologies that is not reviewed in the lecture note.
 %We use the same notation as used in the lecture.
 
-\subsection{Intermediate representation (IR)}
+\section{Intermediate representation (IR)}
 %The bosonic IR basis is defined in terms of the SVD of the bosonic kernel
-We now sophisticate the ideas of the SVD presented in the previous subsection.
+We now sophisticate the ideas of the SVD presented in the previous section.
 The so-called intermediate representation (IR) basis functions are defined in terms of singular value expansion as
 \begin{equation}
     K^\mathrm{F}(\tau,\omega')=
-    \sum_{l=0}^\infty U_l(\tau)S_l V_l(\omega').\label{eq:sve-tau}
+    \sum_{l=0}^\infty U_l(\tau)S_l V_l(\omega')\label{eq:sve-tau}
 \end{equation}
+for a fixed frequency cutoff value $\omega$.
+The IR basis functions and singular values are the solution of the integral equation
+\begin{align}
+    S_l U_l(\tau) &= \int_{-\wmax}^\wmax \dd\omega \KF(\tau, \omega) V_l(\omega).\label{eq:integral-eq}
+\end{align}
+In practice, one can solve this integral equation by projecting the equation onto some basis sets for $\tau$ and $\omega$
+such as piecewise Legendre polynomials~\cite{Chikano:2018gd}.
+The user however does not have to implement a solver because a well-tested Python implementation is available~\cite{irbasis3}.
 
 We consider a bosonic correlation function
 \begin{equation}
