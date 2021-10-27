@@ -718,7 +718,7 @@ From Eq.~\eqref{eq:matsubara-lehmann}, one can show that the spectral function h
 \begin{align}
    \rho(\omega) &= \rho_0\beta\epsilon \delta(\omega - \epsilon) + \rho_1(\omega),\label{eq:rho-split}
 \end{align}
-where $\rho'(\omega)$ is a smooth function linearly vanishing at $\omega=0$ and $\epsilon$ is an infinitesimal number.
+where $\rho_1(\omega)$ is a smooth function linearly vanishing at $\omega=0$ and $\epsilon$ is an infinitesimal number.
 %If any, the delta function comes from zero-energy exciations.
 %At low frequencies, we obtain
 %\begin{align}
@@ -726,19 +726,23 @@ where $\rho'(\omega)$ is a smooth function linearly vanishing at $\omega=0$ and 
 %\end{align}
 %If any, the delta function commes from zero-energy exciations.
 %Thus, 
-At low frequencies, we obtain
+%At low frequencies, we obtain
+Then, the auxiliary spectral function reads
 \begin{align}
-   \tilde \rho(\omega) &\simeq \left(\frac{2\rho_0\epsilon}{\omega}\right) \delta(\omega-\epsilon) + \frac{2\rho_1(\omega)}{\beta\omega},
+   \tilde \rho(\omega) &\simeq \left(\frac{2\rho_0\epsilon}{\omega}\right) \delta(\omega-\epsilon) + \frac{2\rho_1(\omega)}{\beta\omega},\label{eq:trho-split}
 \end{align}
 where the second term is a smooth function around $\omega=0$.
-Substituting Eq.~\eqref{eq:rho-split} into Eq.~\eqref{eq:gtau-boson} yields
+Substituting Eq.~\eqref{eq:trho-split} into Eq.~\eqref{eq:gtau-boson} yields
 \begin{align}
     G(\tau) &= -\rho_0 - \int_{-\wmax}^\wmax \dd\omega \KF(\tau, \omega) \tilde \rho_1(\omega),\label{eq:gtau-boson-split}
 \end{align}
 where $\tilde \rho_1(\omega) \equiv \frac{1+e^{-\beta\omega}}{1-e^{-\beta\omega}} \rho_1(\omega)$.
 Because $\tilde \rho_1(\omega)$ is a smooth and non-divergent function, one can use the fermionic IR basis funcitons
 to expand the non-singular part of the bosonic correlation function.
-The singular term, i.e., the constant term in $\tau$, must be treated seperately if any.
+The singular term, i.e., the constant term in $\tau$, must be treated separately if any.
+
+\subsection{Dimensionless representation}
+\textcolor{red}{Write it!}
 
 \subsection{Numerical demonstration}
 We now demonstrate how to generate IR basis functions by decomposing the kernel using the Python library
@@ -749,6 +753,14 @@ You can install \texttt{irbasis3} by running the following command from a shell:
 $ pip install -U irbasis3 xprec
 \end{verbatim}
 Alternatively, you can use a template jupyter notebook at Google Colab~\cite{colab-template}.
+
+\begin{enumerate}
+    \item Define a kernel object
+    \item Evaluate the kernel
+    \item SVE
+    \item Plot singular values/basis functions
+    \item Expand hubbard atom: from Gtau, from spectral function
+\end{enumerate}
 %\begin{align}
     %K^\mathrm{B}(\iw, \omega') &= \frac{\omega'}{\iw-\omega'}.\label{eq:KB-matsu}
 %\end{align}
