@@ -659,19 +659,35 @@ matches the original one well.
 %The bosonic IR basis is defined in terms of the SVD of the bosonic kernel
 We now sophisticate the ideas of the SVD presented in the previous section.
 \subsection{Fermionic case}
+In the imaginary-time domain, the Lehmann represenation reads 
+\begin{align}
+    G(\tau) &= - \int_{-\wmax}^\wmax \dd\omega \KF(\tau, \omega) \rho(\omega),\label{eq:gtau-fermion}
+\end{align}
+where 
+\begin{align}
+    \KF(\tau, \omega) &= \frac{e^{-\omega\tau}}{1 + e^{-\beta\omega}}.
+\end{align}
 The so-called intermediate representation (IR) basis functions are defined in terms of singular value expansion as
 \begin{equation}
     K^\mathrm{F}(\tau,\omega')=
     \sum_{l=0}^\infty U_l(\tau)S_l V_l(\omega')\label{eq:sve-tau}
 \end{equation}
-for a fixed frequency cutoff value $\omega$.
+for a fixed frequency cutoff $\omega$.
 The IR basis functions and singular values are the solution of the integral equation
 \begin{align}
     S_l U_l(\tau) &= \int_{-\wmax}^\wmax \dd\omega \KF(\tau, \omega) V_l(\omega).\label{eq:integral-eq}
 \end{align}
 In practice, one can solve this integral equation by projecting the equation onto some basis sets for $\tau$ and $\omega$
 such as piecewise Legendre polynomials~\cite{Chikano:2018gd}.
-The user however does not have to implement a solver because a well-tested Python implementation is available~\cite{irbasis3}.
+The user however does not have to implement a solver
+because a well-tested Python implementation is available~\cite{irbasis2019,irbasis3}.
+As summarized in Ref.~\cite{shinaoka2021efficient}, the IR basis functions have the following properites:
+\begin{description}
+    \item[Property 1] The singular values $S_l$ are non-degenerate, non-negative, and monotonically decrease faster than exponentially with respect to $l$.
+    \item[Property 2] The number of numerically significant singular values (e.g., $S_l/S_0 \ge 10^{-15}$) is determined by the dimensionless quantity $\Lambda\equiv\beta\wmax$ and increases only logarithmically with respect to $\Lambda$.
+    \item[Property 3] $U_l(\tau)$ and $V_l(\omega)$ can be chosen to be real functions, and they then become even-odd functions for even-odd $l$. In this convention, $\hat{U}_l^\alpha(\iw)$ is purely imaginary or real.
+    \item[Property 4] $U_l(\tau)$ and $V_l(\omega)$ have $l$ roots. In addition, in the limit of $\beta\wmax\rightarrow 0$ (a high-temperature limit), $U_l^\alpha(\tau(x))$ and $V_l^\alpha(\omega(x))$ coincide with the Legendre polynomial $P_l(x)$ up to a constant [$\tau(x) \equiv \beta(x+1)/2$, $\omega(x) \equiv x \wmax$ for $-1 < x < 1$]
+\end{description}
 
 \subsection{Bosonic case}
 %We consider a bosonic correlation function
@@ -684,8 +700,9 @@ The user however does not have to implement a solver because a well-tested Pytho
     %\hat{G}(\iw)=\int_{-\wmax}^\wmax\dd{\omega'} K^\mathrm{B}(\iw,\omega')\rho(\omega'),
 %\end{equation}
 %where the bosonic kernel is defined by
-In the original proposal of the IR basis, they proposed to use different basis functions for bosons.
-In this lecture, following a recent proposal in a follow-up paper, 
+In the original proposal of the IR basis~\cite{Shinaoka:2017ix,Chikano:2018gd},
+they proposed to use different basis functions for bosons.
+In this lecture, as proposed in a recent follow-up paper~\cite{kaye2021discrete},
 we use the same basis functions for bosons as those for fermions.
 
 For a bosonic correlation function, the Lehmann representation in $\tau$ reads
@@ -723,6 +740,15 @@ Because $\tilde \rho_1(\omega)$ is a smooth and non-divergent function, one can 
 to expand the non-singular part of the bosonic correlation function.
 The singular term, i.e., the constant term in $\tau$, must be treated seperately if any.
 
+\subsection{Numerical demonstration}
+We now demonstrate how to generate IR basis functions by decomposing the kernel using the Python library
+\texttt{irbasis3}.
+This can be used in the Julia language through \texttt{PyCall.jl}.
+You can install \texttt{irbasis3} by running the following command from a shell:
+\begin{verbatim}
+$ pip install -U irbasis3 xprec
+\end{verbatim}
+Alternatively, you can use a template jupyter notebook at Google Colab~\cite{colab-template}.
 %\begin{align}
     %K^\mathrm{B}(\iw, \omega') &= \frac{\omega'}{\iw-\omega'}.\label{eq:KB-matsu}
 %\end{align}
@@ -747,12 +773,12 @@ The singular term, i.e., the constant term in $\tau$, must be treated seperately
 %As discussed in Ref.~\ref{Chikano:2018gd}, the IR basis functions are insulating.
 
 
-As an example, let us look at the density-density correlation function of the Hubbard atom.
-This correlation function includes a constant term in $\tau$, which corresponds to a delta function at zero frequency.
-
-\begin{itemize}
-    \item Zero frequency peak
-\end{itemize}
+%As an example, let us look at the density-density correlation function of the Hubbard atom.
+%This correlation function includes a constant term in $\tau$, which corresponds to a delta function at zero frequency.
+%
+%\begin{itemize}
+    %\item Zero frequency peak
+%\end{itemize}
 
 \clearpage
 \section{Fitting numerical data}
