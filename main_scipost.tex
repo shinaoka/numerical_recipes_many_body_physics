@@ -643,8 +643,6 @@ matches the original one well.
 
 
 
-
-
 \begin{Exercise}
     Genearate another spectural function by taking more singular vectors.
     What happens if we take too many singular vectors?
@@ -686,28 +684,67 @@ The user however does not have to implement a solver because a well-tested Pytho
     %\hat{G}(\iw)=\int_{-\wmax}^\wmax\dd{\omega'} K^\mathrm{B}(\iw,\omega')\rho(\omega'),
 %\end{equation}
 %where the bosonic kernel is defined by
-\begin{align}
-    K^\mathrm{B}(\iw, \omega') &= \frac{\omega'}{\iw-\omega'}.\label{eq:KB-matsu}
-\end{align}
-The spectral function is defined by
-\begin{equation}
-    \rho(\omega) = -\frac{\omega}{\pi}
-    \mathrm{Im} \hat G(\omega+\mathrm{i}0^+).
-        \label{eq:rho}
-\end{equation}
-The bosonic kernel is transformed to the $\tau$ space as
-\begin{align}
-    K^\mathrm{B}(\tau,\omega') &= \frac{\omega' e^{-\tau\omega'}}{1-e^{-\beta\omega'}}.\label{eq:KB-tau}
-\end{align}
-The extra factor of $\omega'$ in Eq.~\eqref{eq:KB-matsu} was inroduced
-to avoid the divengence of $K^\mathrm{B}(\tau,\omega')$ in the limit of $\omega'\rightarrow 0$.
-In Eq.~\eqref{eq:KB-matsu}, the two $\omega'$ in the numerator and denominator cancel out in this limit.
+In the original proposal of the IR basis, they proposed to use different basis functions for bosons.
+In this lecture, following a recent proposal in a follow-up paper, 
+we use the same basis functions for bosons as those for fermions.
 
-The IR basis functions, i.e., singular functions of the kernel, are illusrated in Fig.~\ref{fig:uvB}.
+For a bosonic correlation function, the Lehmann representation in $\tau$ reads
+\begin{align}
+    G(\tau) &= - \int_{-\wmax}^\wmax \dd \omega \frac{e^{-\omega\tau}}{1-e^{-\beta\omega}} \rho(\omega)\nonumber\\
+    &= -  \int_{-\wmax}^\wmax \dd\omega \KF(\tau, \omega) \tilde \rho(\omega),\label{eq:gtau-boson}
+\end{align}
+where $\rho(\omega) = - \frac{1}{\pi}\imaginary G(\omega+\ii 0^+)$ and we defined an auxiliary spectral function
+\begin{align}
+    \tilde \rho(\omega) &\equiv \frac{1+e^{-\beta\omega}}{1-e^{-\beta \omega}} \rho(\omega).
+\end{align}
+From Eq.~\eqref{eq:matsubara-lehmann}, one can show that the spectral function has a general form of
+\begin{align}
+   \rho(\omega) &= \rho_0\beta\epsilon \delta(\omega - \epsilon) + \rho_1(\omega),\label{eq:rho-split}
+\end{align}
+where $\rho'(\omega)$ is a smooth function linearly vanishing at $\omega=0$ and $\epsilon$ is an infinitesimal number.
+%If any, the delta function comes from zero-energy exciations.
+%At low frequencies, we obtain
+%\begin{align}
+   %\rho(\omega) &= \rho_0 \delta(\omega) + \rho_1 \omega
+%\end{align}
+%If any, the delta function commes from zero-energy exciations.
+%Thus, 
+At low frequencies, we obtain
+\begin{align}
+   \tilde \rho(\omega) &\simeq \left(\frac{2\rho_0\epsilon}{\omega}\right) \delta(\omega-\epsilon) + \frac{2\rho_1(\omega)}{\beta\omega},
+\end{align}
+where the second term is a smooth function around $\omega=0$.
+Substituting Eq.~\eqref{eq:rho-split} into Eq.~\eqref{eq:gtau-boson} yields
+\begin{align}
+    G(\tau) &= -\rho_0 - \int_{-\wmax}^\wmax \dd\omega \KF(\tau, \omega) \tilde \rho_1(\omega),\label{eq:gtau-boson-split}
+\end{align}
+where $\tilde \rho_1(\omega) \equiv \frac{1+e^{-\beta\omega}}{1-e^{-\beta\omega}} \rho_1(\omega)$.
+Because $\tilde \rho_1(\omega)$ is a smooth and non-divergent function, one can use the fermionic IR basis funcitons
+to expand the non-singular part of the bosonic correlation function.
+The singular term, i.e., the constant term in $\tau$, must be treated seperately if any.
+
+%\begin{align}
+    %K^\mathrm{B}(\iw, \omega') &= \frac{\omega'}{\iw-\omega'}.\label{eq:KB-matsu}
+%\end{align}
+%The spectral function is defined by
 %\begin{equation}
-    %\hat{G}^\alpha(\iw)=\int_0^\beta\dd{\tau}\ee^{\iw\tau}\langle T_{\tau}A^\alpha(\tau)B^\alpha(0)\rangle,\label{eq:giwdef}
+    %\rho(\omega) = -\frac{\omega}{\pi}
+    %\mathrm{Im} \hat G(\omega+\mathrm{i}0^+).
+        %\label{eq:rho}
 %\end{equation}
-As discussed in Ref.~\ref{Chikano:2018gd}, the IR basis functions are insulating.
+%The bosonic kernel is transformed to the $\tau$ space as
+%\begin{align}
+    %K^\mathrm{B}(\tau,\omega') &= \frac{\omega' e^{-\tau\omega'}}{1-e^{-\beta\omega'}}.\label{eq:KB-tau}
+%\end{align}
+%The extra factor of $\omega'$ in Eq.~\eqref{eq:KB-matsu} was inroduced
+%to avoid the divengence of $K^\mathrm{B}(\tau,\omega')$ in the limit of $\omega'\rightarrow 0$.
+%In Eq.~\eqref{eq:KB-matsu}, the two $\omega'$ in the numerator and denominator cancel out in this limit.
+%
+%The IR basis functions, i.e., singular functions of the kernel, are illusrated in Fig.~\ref{fig:uvB}.
+%%\begin{equation}
+    %\hat{G}^\alpha(\iw)=\int_0^\beta\dd{\tau}\ee^{\iw\tau}\langle T_{\tau}A^\alpha(\tau)B^\alpha(0)\rangle,\label{eq:giwdef}
+%%\end{equation}
+%As discussed in Ref.~\ref{Chikano:2018gd}, the IR basis functions are insulating.
 
 
 As an example, let us look at the density-density correlation function of the Hubbard atom.
