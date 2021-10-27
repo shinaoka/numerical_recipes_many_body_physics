@@ -741,8 +741,8 @@ Because $\tilde \rho_1(\omega)$ is a smooth and non-divergent function, one can 
 to expand the non-singular part of the bosonic correlation function.
 The singular term, i.e., the constant term in $\tau$, must be treated separately if any.
 
-\subsection{Dimensionless representation}
-\textcolor{red}{Write it!}
+%\subsection{Dimensionless representation}
+%\textcolor{red}{Write it!}
 
 \subsection{Numerical demonstration}
 We now demonstrate how to generate IR basis functions by decomposing the kernel using the Python library
@@ -753,14 +753,32 @@ You can install \texttt{irbasis3} by running the following command from a shell:
 $ pip install -U irbasis3 xprec
 \end{verbatim}
 Alternatively, you can use a template jupyter notebook at Google Colab~\cite{colab-template}.
-
+In the repository, we provide two Jupyter notebooks (section6.ipynb, section6\_julia.ipynb)
+for Python and Julia, where we
 \begin{enumerate}
-    \item Define a kernel object
-    \item Evaluate the kernel
-    \item SVE
-    \item Plot singular values/basis functions
-    \item Expand hubbard atom: from Gtau, from spectral function
+    \item define a kernel object,
+    \item generate IR basis using singular value expansion,
+    \item plot singular values/basis functions.
 \end{enumerate}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\columnwidth]{ir_basis_svals.pdf}
+    \includegraphics[width=0.6\columnwidth]{ir_basis_functions.pdf}
+    \caption{
+        Singular values and IR basis functions computed by \texttt{irbasis3} for $\Lambda=100$ and $\beta=10$.
+    }
+    \label{fig:irbasis}
+\end{figure}
+
+\begin{Exercise}
+    Expand your favorite spectral function in $V_l(\omega)$ and compute the expansion coefficients
+    of $G(\tau)$ using the relation $G_l = -S_l \rho_l$.
+    Then, evaluate $G(\tau)$ on a uniform mesh.
+    Note that $\rho(\omega) = \delta(\omega-\omega_0)$ yields $\rho_l = V_l(\omega_0)$.
+\end{Exercise}
+
+
 %\begin{align}
     %K^\mathrm{B}(\iw, \omega') &= \frac{\omega'}{\iw-\omega'}.\label{eq:KB-matsu}
 %\end{align}
