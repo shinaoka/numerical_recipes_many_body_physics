@@ -669,8 +669,8 @@ where
 \end{align}
 The so-called intermediate representation (IR) basis functions are defined in terms of singular value expansion as
 \begin{equation}
-    K^\mathrm{F}(\tau,\omega')=
-    \sum_{l=0}^\infty U_l(\tau)S_l V_l(\omega')\label{eq:sve-tau}
+    K^\mathrm{F}(\tau,\omega)=
+    \sum_{l=0}^\infty U_l(\tau)S_l V_l(\omega)\label{eq:sve-tau}
 \end{equation}
 for a fixed frequency cutoff $\wmax$.
 The IR basis functions and singular values are the solution of the integral equation
@@ -686,7 +686,7 @@ As summarized in Ref.~\cite{shinaoka2021efficient}, the IR basis functions have 
     \item[Property 1] The singular values $S_l$ are non-degenerate, non-negative, and monotonically decrease faster than exponentially with respect to $l$.
     \item[Property 2] The number of numerically significant singular values (e.g., $S_l/S_0 \ge 10^{-15}$) is determined by the dimensionless quantity $\Lambda\equiv\beta\wmax$ and increases only logarithmically with respect to $\Lambda$.
     \item[Property 3] $U_l(\tau)$ and $V_l(\omega)$ can be chosen to be real functions, and they then become even-odd functions for even-odd $l$. In this convention, $\hat{U}_l^\alpha(\iw)$ is purely imaginary or real.
-    \item[Property 4] $U_l(\tau)$ and $V_l(\omega)$ have $l$ roots. In addition, in the limit of $\beta\wmax\rightarrow 0$ (a high-temperature limit), $U_l^\alpha(\tau(x))$ and $V_l^\alpha(\omega(x))$ coincide with the Legendre polynomial $P_l(x)$ up to a constant [$\tau(x) \equiv \beta(x+1)/2$, $\omega(x) \equiv x \wmax$ for $-1 < x < 1$]
+    \item[Property 4] $U_l(\tau)$ and $V_l(\omega)$ have $l$ roots. In addition, in the limit of $\beta\wmax\rightarrow 0$ (a high-temperature limit), $U_l^\alpha(\tau(x))$ and $V_l^\alpha(\omega(x))$ coincide with the Legendre polynomial $P_l(x)$ up to a constant [$\tau(x) \equiv \beta(x+1)/2$, $\omega(x) \equiv x \wmax$ for $-1 < x < 1$].
 \end{description}
 
 \subsection{Bosonic case}
