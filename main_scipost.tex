@@ -761,6 +761,17 @@ for Python and Julia, where we
     \item plot singular values/basis functions.
 \end{enumerate}
 
+In Python, we can generate a feromioc basis object \texttt{basis}
+by computing singular values down to $S_l/S_0 \simeq 10^{-10}$
+for $\Lambda=10^2$ and $\beta=10$ as follows:
+\begin{python}
+import irbasis3
+lambda_ = 100
+beta = 10
+K = irbasis3.KernelFFlat(lambda_=100)
+basis = irbasis3.FiniteTempBasis(K, statistics='F', beta=beta, eps=1e-10)
+\end{python}
+
 \begin{figure}
     \centering
     \includegraphics[width=0.6\columnwidth]{ir_basis_svals.pdf}
@@ -770,6 +781,22 @@ for Python and Julia, where we
     }
     \label{fig:irbasis}
 \end{figure}
+
+An instance of \texttt{FiniteTempBasis} has many data attributes and functions,
+which we summarize in Table~\ref{table:finite_temp_basis}.
+You can learn how to use it in the notebook.
+
+%\begin{table}[ht]
+    %\centering
+    %\begin{tabular}{ccc}
+        %Attribute name & Type       & Description \\
+        %S              & 1D ndarray & Singular values \\
+        %u              &            & IR basis functions for $\tau$\\
+        %%v              &            & IR basis functions for $\omega$
+    %\end{tabular}
+    %\caption{}
+    %\label{table:finite_temp_basis}
+%\end{table}
 
 \begin{Exercise}
     Expand your favorite spectral function in $V_l(\omega)$ and compute the expansion coefficients
