@@ -761,6 +761,7 @@ for Python and Julia, where we
     \item plot singular values/basis functions.
 \end{enumerate}
 
+\subsubsection{Basis object}
 In Python, we can generate a feromioc basis object \texttt{basis}
 by computing singular values down to $S_l/S_0 \simeq 10^{-10}$
 for $\Lambda=10^2$ and $\beta=10$ as follows:
@@ -771,6 +772,23 @@ beta = 10
 K = irbasis3.KernelFFlat(lambda_=100)
 basis = irbasis3.FiniteTempBasis(K, statistics='F', beta=beta, eps=1e-10)
 \end{python}
+
+\subsubsection{Singular values}
+\begin{python}
+ basis.s
+\end{python}
+
+\begin{python}
+array([1.45387261e+00, 1.24137141e+00, 7.98387159e-01, 5.34115485e-01,
+3.19202855e-01, 1.88195405e-01, 1.06269952e-01, 5.84664007e-02,
+3.12626140e-02, 1.62959998e-02, 8.28608690e-03, 4.11383766e-03,
+1.99543191e-03, 9.46115126e-04, 4.38678206e-04, 1.98971153e-04,
+8.83076718e-05, 3.83596425e-05, 1.63120097e-05, 6.79164595e-06,
+2.76915058e-06, 1.10582146e-06, 4.32562293e-07, 1.65764896e-07,
+6.22400190e-08, 2.28998146e-08, 8.25716208e-09, 2.91821977e-09,
+1.01098806e-09, 3.43374895e-10])
+\end{python}
+
 
 \begin{figure}
     \centering
