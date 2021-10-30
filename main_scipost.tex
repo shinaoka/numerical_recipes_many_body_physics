@@ -773,7 +773,9 @@ K = irbasis3.KernelFFlat(lambda_=100)
 basis = irbasis3.FiniteTempBasis(K, statistics='F', beta=beta, eps=1e-10)
 \end{python}
 
-\subsubsection{Singular values}
+%\subsubsection{Singular values}
+The data attribute \texttt{s} of the basis object
+stores all the available singular values:
 \begin{python}
  basis.s
 \end{python}
@@ -789,6 +791,15 @@ array([1.45387261e+00, 1.24137141e+00, 7.98387159e-01, 5.34115485e-01,
 1.01098806e-09, 3.43374895e-10])
 \end{python}
 
+%\subsubsection{Basis functions}
+The data attributes \texttt{u} \texttt{v} of the basis object are
+\texttt{PiecewiseLegendrePoly} objects representing IR basis functions
+for $\tau$ and $\omega$, respectively.
+You can evaluate the basis functions as follows:
+\begin{python}
+basis.u(np.array([0, 0.5*beta, beta]))
+\end{python}
+You can learn how to use them in the notebook.
 
 \begin{figure}
     \centering
@@ -800,10 +811,8 @@ array([1.45387261e+00, 1.24137141e+00, 7.98387159e-01, 5.34115485e-01,
     \label{fig:irbasis}
 \end{figure}
 
-An instance of \texttt{FiniteTempBasis} has many data attributes and functions,
-which we summarize in Table~\ref{table:finite_temp_basis}.
-You can learn how to use it in the notebook.
-
+%An instance of \texttt{FiniteTempBasis} has many data attributes and functions,
+%which we summarize in Table~\ref{table:finite_temp_basis}.
 %\begin{table}[ht]
     %\centering
     %\begin{tabular}{ccc}
