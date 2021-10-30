@@ -770,6 +770,9 @@ lambda_ = 100
 beta = 10
 K = irbasis3.KernelFFlat(lambda_=100)
 basis = irbasis3.FiniteTempBasis(K, statistics='F', beta=beta, eps=1e-10)
+basis.s # Singular values
+basis.u # IR basis functions for tau
+basis.v # IR basis functions for omega
 \end{python}
 
 \begin{figure}
@@ -782,9 +785,9 @@ basis = irbasis3.FiniteTempBasis(K, statistics='F', beta=beta, eps=1e-10)
     \label{fig:irbasis}
 \end{figure}
 
-An instance of \texttt{FiniteTempBasis} has many data attributes and functions,
-which we summarize in Table~\ref{table:finite_temp_basis}.
-You can learn how to use it in the notebook.
+An instance object of \texttt{FiniteTempBasis} has many data attributes and functions.
+%which we summarize in Table~\ref{table:finite_temp_basis}.
+You can learn how to use them in the notebook.
 
 %\begin{table}[ht]
     %\centering
