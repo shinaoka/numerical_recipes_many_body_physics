@@ -905,6 +905,23 @@ the result converges exponentially with increasing the degree of the Gauss-Legen
 
 \subsection{From imaginary-time domain to IR basis}
 \subsubsection{Numerical integration}
+A numerically stable way to compute the expansion coefficients of $G(\tau)$ in the IR basis
+is evaluating the integral
+\begin{align}
+    G_l &= \int_0^\beta \dd \tau G(\tau) U_l(\tau).
+\end{align}
+
+This can be done again by using composite Gauss-Legendre quadrature
+based on the roots of $U_l(\tau)$ for the larget $l$ used in the expansion.
+This requires to evaluate $G(\tau)$ on quadrature nodes whose number is roughly 
+$N P$ ($N$ is the size of the IR basis and $P$ is the degeree of the quadrature).
+From experience, $P=10$--$20$ are large enough.
+At low tempertures,
+this number scales logarithmically with $\beta$.
+This functionality is implemented in \texttt{irbasis3}, which can be used as follows:
+\begin{python}
+#Some sampling
+\end{python}
 
 \subsubsection{Sparse sampling}
 
