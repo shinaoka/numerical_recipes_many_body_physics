@@ -761,7 +761,7 @@ for Python and Julia, where we
     \item plot singular values/basis functions.
 \end{enumerate}
 
-\subsubsection{Basis object}
+%\subsubsection{Basis object}
 In Python, we can generate a feromioc basis object \texttt{basis}
 by computing singular values down to $S_l/S_0 \simeq 10^{-10}$
 for $\Lambda=10^2$ and $\beta=10$ as follows:
@@ -832,6 +832,13 @@ You can learn how to use them in the notebook.
     Note that $\rho(\omega) = \delta(\omega-\omega_0)$ yields $\rho_l = V_l(\omega_0)$.
 \end{Exercise}
 
+%\begin{Exercise}
+%\end{Exercise}
+%
+%\begin{python}
+%import numpy as np
+%\end{python}
+
 
 %\begin{align}
     %K^\mathrm{B}(\iw, \omega') &= \frac{\omega'}{\iw-\omega'}.\label{eq:KB-matsu}
@@ -865,7 +872,48 @@ You can learn how to use them in the notebook.
 %\end{itemize}
 
 \clearpage
-\section{Fitting numerical data}
+\section{Transforming numerical data}
+In this section,
+we explain how to transform data between real-frequency/Matsubara-frequency/IR-basis domains.
+
+\subsection{From real frequency to IR basis}
+It is straightforwad to compute expansion coefficients in the IR 
+from a given spectral function.
+This can be done by evaluating the integral
+\begin{align}
+    \rho_l &= \int_{-\wmax}^\wmax \dd \omega V_l(\omega) \rho(\omega).
+\end{align}
+
+As seen in the previous section,
+the distribution of $V_l(\omega)$ is much denser than Legendre polynomial $P_l(x(\tau))$ around $\tau=0, \beta$.
+Thus, evaluating the integral precisely requires the use of composite Gauss–Legendre quadrature,
+where the whole inteval $[-\wmax, \wmax]$ is divided to subintervals and the normal Gauss-Legendre quadrature is 
+applied to each interval.
+The roots of $V_l(\omega)$ for the highest $l$ used in the expansion
+is a reasonable choice of the division points.
+If $\rho(\omega)$ is smooth enough within each subinterval,
+the result converges exponentially with increasing the degree of the Gauss-Legendre quadrature.
+
+\begin{python}
+#root
+#Composite Gauss-Legendre polynomial
+\end{python}
+
+\begin{python}
+#Three Gaussian peaks
+\end{python}
+
+\subsection{From imaginary-time domain to IR basis}
+\subsubsection{Numerical integration}
+
+\subsubsection{Sparse sampling}
+
+
+\subsection{From Matsubara-frequency domain to IR basis}
+\subsubsection{Dense mesh}
+
+\subsubsection{Sparse sampling}
+
 As reviewed in the lecture note, \textit{fitting} is a convenient way to transform numerical data either in the imaginary-time domain or in the imaginary-frequency domain.
 In the practical calculations, we need a special care on the numerical stability of the fitting.
 We explain how to do it in a stable way using several typical cases.
