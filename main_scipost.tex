@@ -44,8 +44,7 @@
 \newcommand\Fbar{\mathrm{\bar F}}
 \newcommand\Bbar{\mathrm{\bar B}}
 \newcommand{\GW}{{\ensuremath{GW}}}
-\newcommand{\tauk}{\ensuremath{\bar{\tau}^\alpha_k}}
-\newcommand{\taukF}{\ensuremath{\bar{\tau}^\mathrm{F}_k}}
+\newcommand{\tauk}{\ensuremath{\bar{\tau}_k}}
 \newcommand{\wk}{\ensuremath{\bar{\omega}^\alpha_k}}
 
 \newcommand{\wkF}{\ensuremath{\bar{\omega}^\mathrm{F}_k}}
@@ -741,8 +740,14 @@ Because $\tilde \rho_1(\omega)$ is a smooth and non-divergent function, one can 
 to expand the non-singular part of the bosonic correlation function.
 The singular term, i.e., the constant term in $\tau$, must be treated separately if any.
 
-%\subsection{Dimensionless representation}
+\subsection{Basis functions in Matsubara frequencies}
 %\textcolor{red}{Write it!}
+We basis functions in Matsubara frequencies as
+\begin{align}
+    \hat{U}_l(\iv) &\equiv \int_0^\beta \dd \tau e^{\iv\tau} U_l(\tau),
+\end{align}
+where $\nu = m\pi/\beta$ ($m$ are even/odd integers for bosons and fermions, respectively).
+For fermions, $\hat{U}_(\iv)$ are purely real/imaginary for odd/even $l$.
 
 \subsection{Numerical demonstration}
 We now demonstrate how to generate IR basis functions by decomposing the kernel using the Python library
@@ -803,10 +808,13 @@ You can learn how to use them in the notebook.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.6\columnwidth]{ir_basis_svals.pdf}
-    \includegraphics[width=0.6\columnwidth]{ir_basis_functions.pdf}
+    \includegraphics[width=0.55\columnwidth]{ir_basis_svals.pdf}
+    \includegraphics[width=0.55\columnwidth]{ir_basis_functions.pdf}
     \caption{
         Singular values and IR basis functions computed by \texttt{irbasis3} for $\Lambda=100$ and $\beta=10$.
+        $\hat U(\iv)$ were computed at fermionic frequencies.
+        Symmetry dictates that $\hat U(\iv)$ are purely real or imaginary.
+        We plot only the respective part.
     }
     \label{fig:irbasis}
 \end{figure}
@@ -961,7 +969,7 @@ $U_{N-1}(\tau)$ (see Fig.~\ref{fig:sampling_points_tau}).
     \includegraphics[width=0.6\columnwidth]{sampling_points_tau.pdf}
     \caption{
     Basis function $U_l(\tau)$ with $l=29$ computed for $\wmax=10$ and $\beta=10$.
-    The vertical lines are the associated sampling points.
+    The vertical lines denotes the positions of the associated sampling points.
     }
     \label{fig:sampling_points_tau}
 \end{figure}
@@ -977,9 +985,9 @@ For $\wmax=\beta=10$ and $N=30$, the condition number is as small as 5.89.
 A more detailed discussion on the condition numbers is found in Appendix B of Ref.~\cite{shinaoka2021efficient}
 
 \subsection{From Matsubara-frequency domain to IR basis}
-\subsubsection{Dense mesh}
+One can transform numerical data on Matsubara frequencies using sparse-sampling techniques~\cite{Li:2020eu}.
+%\subsubsection{Dense mesh}
 
-\subsubsection{Sparse sampling}
 
 \subsection{Robustness against noise and regularization}
 
