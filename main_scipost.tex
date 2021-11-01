@@ -894,14 +894,23 @@ is a reasonable choice of the division points.
 If $\rho(\omega)$ is smooth enough within each subinterval,
 the result converges exponentially with increasing the degree of the Gauss-Legendre quadrature.
 
+We demonstrate how to do this transform using \texttt{irbasis3} for the spectral function consisting 
+of three Gausssian peaks (see the solid line of Fig.~\ref{fig:three_gaussian}).
+This can be done by using the \texttt{overlap} function associated with the basis object \texttt{basis}
+as follows:
 \begin{python}
-#root
-#Composite Gauss-Legendre polynomial
-\end{python}
+gaussian = lambda x, mu, sigma:\
+    np.exp(-((x-mu)/sigma)**2)/(np.sqrt(np.pi)*sigma)
 
-\begin{python}
-#Three Gaussian peaks
+rho = lambda omega: 0.2*gaussian(omega, 0.0, 0.15) + \
+    0.4*gaussian(omega, 1.0, 0.8) + 0.4*gaussian(omega, -1.0, 0.8
+rhol = basis.v.overlap(rho)
 \end{python}
+Here, \texttt{rho} is a function that evaluates the values of the spectral function at given real frequencies.
+We internally use the Gauss-Legendre quadrature for the numerical integration.
+The result \texttt{rhol} is a 1D array containing $\rho_l$.
+For the full source code, see section7.ipynb.
+
 
 \subsection{From imaginary-time domain to IR basis}
 \subsubsection{Numerical integration}
@@ -918,10 +927,15 @@ $N P$ ($N$ is the size of the IR basis and $P$ is the degeree of the quadrature)
 From experience, $P=10$--$20$ are large enough.
 At low tempertures,
 this number scales logarithmically with $\beta$.
-This functionality is implemented in \texttt{irbasis3}, which can be used as follows:
+%This functionality is implemented in \texttt{irbasis3}, which can be used as follows:
+This can be done similarly to the case of $\rho(\omega)$ as follows:
 \begin{python}
-#Some sampling
+gl_reconst = basis.u.overlap(eval_gtau)
 \end{python}
+Here, \texttt{eval\_gtau} is a function that evaluates the values of $G(\tau)$ at given imaginary times.
+%We internally use the Gauss-Legendre quadrature for the numerical integration.
+The result \texttt{gl\_reconst} is a 1D array containing the computed $g_l$.
+For the full source code, see section7.ipynb.
 
 \subsubsection{Sparse sampling}
 The expansion coefficients can be evaluated by using even a fewer sampling points in the imaginary-time domain.
@@ -930,11 +944,36 @@ The essential idea is simple.
 If we want to determine $N$ coefficients $G_l$,
 we need to know $G(\tau)$ on only up to $N$ sampling points.
 Let $\bar{\tau}_1 < \cdots < \bar{\tau}_N$ be such sampling points,
-one can evaluate the expansion coefficients by minimizing
-
+one can evaluate the expansion coefficients as
+\begin{align}
+    g_l &= \underset{g_l}{\mathrm{argmin}}
+        \sum_k \bigg| \hat G(\tauk) - \sum_{l=0}^{L-1} \hat U_l(\tauk)G_l \bigg|^2\nonumber \\
+    &= \pqty{\Fmat^+ \boldsymbol{g}}_l,\label{eq:fittau}
+\end{align}
+where we define $(\Fmat)_{kl} = U_l(\tauk)$ and $\Fmat^+$ is its pseudo inverse.
 %In practice, different choices of sampling points lead to different numeri
-The numerical stability of this ``fitting'' is determined by the condition number of the coefficient matrix.
-
+The numerical stability of this ``fitting'' scheme is determined
+by the condition number of the coefficient matrix $\Fmat$.
+An empiritically good our choice is to use the middle points of the neighboring roots of 
+$U_{N-1}(\tau)$ (see Fig.~\ref{fig:sampling_points_tau}).
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\columnwidth]{sampling_points_tau.pdf}
+    \caption{
+    Basis function $U_l(\tau)$ with $l=29$ computed for $\wmax=10$ and $\beta=10$.
+    The vertical lines are the associated sampling points.
+    }
+    \label{fig:sampling_points_tau}
+\end{figure}
+The generation of sampling points and fitting can be done as follows:
+\begin{python}
+smpl = irbasis3.TauSampling(basis)
+print("Sampling points: ", smpl.sampling_points)
+print("Condition number: ", smpl.cond)
+gl_reconst_sparse = smpl.fit(eval_gtau(smpl.sampling_points))
+\end{python}
+Here, \texttt{eval\_gtau} is a function that evaluates $G(\tau)$ at given imaginary times.
+For $\wmax=\beta=10$ and $N=30$, the condition number is as small as 5.89.
 
 \subsection{From Matsubara-frequency domain to IR basis}
 \subsubsection{Dense mesh}
