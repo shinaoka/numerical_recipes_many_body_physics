@@ -933,12 +933,15 @@ Let $\bar{\tau}_1 < \cdots < \bar{\tau}_N$ be such sampling points,
 one can evaluate the expansion coefficients by minimizing
 
 %In practice, different choices of sampling points lead to different numeri
+The numerical stability of this ``fitting'' is determined by the condition number of the coefficient matrix.
 
 
 \subsection{From Matsubara-frequency domain to IR basis}
 \subsubsection{Dense mesh}
 
 \subsubsection{Sparse sampling}
+
+\subsection{Robustness against noise and regularization}
 
 As reviewed in the lecture note, \textit{fitting} is a convenient way to transform numerical data either in the imaginary-time domain or in the imaginary-frequency domain.
 In the practical calculations, we need a special care on the numerical stability of the fitting.
