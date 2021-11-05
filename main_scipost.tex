@@ -955,7 +955,7 @@ Let $\bar{\tau}_1 < \cdots < \bar{\tau}_N$ be such sampling points,
 one can evaluate the expansion coefficients as
 \begin{align}
     g_l &= \underset{g_l}{\mathrm{argmin}}
-        \sum_k \bigg| \hat G(\tauk) - \sum_{l=0}^{L-1} \hat U_l(\tauk)G_l \bigg|^2\nonumber \\
+        \sum_k \bigg| G(\tauk) - \sum_{l=0}^{N-1} U_l(\tauk)G_l \bigg|^2\nonumber \\
     &= \pqty{\Fmat^+ \boldsymbol{g}}_l,\label{eq:fittau}
 \end{align}
 where we define $(\Fmat)_{kl} = U_l(\tauk)$ and $\Fmat^+$ is its pseudo inverse.
