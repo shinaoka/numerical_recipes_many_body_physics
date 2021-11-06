@@ -984,6 +984,15 @@ Here, \texttt{eval\_gtau} is a function that evaluates $G(\tau)$ at given imagin
 For $\wmax=\beta=10$ and $N=30$, the condition number is as small as 5.89.
 A more detailed discussion on the condition numbers is found in Appendix B of Ref.~\cite{shinaoka2021efficient}
 
+\begin{Exercise}
+One can create a \texttt{TauSampling} object by explicitly specifying a set of sampling points as follows.
+Compute the condition number for a uniform mesh.
+\begin{python}
+my_smpl_points = *** # Set your sampling points.
+smpl = irbasis3.TauSampling(basis, sampling_points=my_smpl_points)
+\end{python}
+\end{Exercise}
+
 \subsection{From Matsubara-frequency domain to IR basis}
 One can transform numerical data on Matsubara frequencies using sparse-sampling techniques~\cite{Li:2020eu}.
 %\subsubsection{Dense mesh}
