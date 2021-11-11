@@ -46,6 +46,7 @@
 \newcommand{\GW}{{\ensuremath{GW}}}
 \newcommand{\tauk}{\ensuremath{\bar{\tau}_k}}
 \newcommand{\wk}{\ensuremath{\bar{\omega}^\alpha_k}}
+\newcommand{\vk}{\ensuremath{\bar{\nu}_k}}
 
 \newcommand{\wkF}{\ensuremath{\bar{\omega}^\mathrm{F}_k}}
 
@@ -951,11 +952,11 @@ This is achieved by using sparse-sampling techniques.
 The essential idea is simple.
 If we want to determine $N$ coefficients $G_l$,
 we need to know $G(\tau)$ on only up to $N$ sampling points.
-Let $\bar{\tau}_1 < \cdots < \bar{\tau}_N$ be such sampling points,
+Let $\bar{\tau}_1 < \cdots < \bar{\tau}_{N_\mathrm{smp}}$ ($N_\mathrm{smpl}\ge N$) be such sampling points,
 one can evaluate the expansion coefficients as
 \begin{align}
     g_l &= \underset{g_l}{\mathrm{argmin}}
-        \sum_k \bigg| G(\tauk) - \sum_{l=0}^{N-1} U_l(\tauk)G_l \bigg|^2\nonumber \\
+        \sum_k \bigg| G(\tauk) - \sum_{l=0}^{N_\mathrm{smp}-1} U_l(\tauk)G_l \bigg|^2\nonumber \\
     &= \pqty{\Fmat^+ \boldsymbol{g}}_l,\label{eq:fittau}
 \end{align}
 where we define $(\Fmat)_{kl} = U_l(\tauk)$ and $\Fmat^+$ is its pseudo inverse.
@@ -995,7 +996,49 @@ smpl = irbasis3.TauSampling(basis, sampling_points=my_smpl_points)
 
 \subsection{From Matsubara-frequency domain to IR basis}
 One can transform numerical data in the Matsubara-frequency domain using sparse-sampling techniques~\cite{Li:2020eu}.
-%\subsubsection{Dense mesh}
+The IR basis functions $\hat U_l(\iv)$ are purely imaginary/real for even/odd $l$.
+Although the basis functions $U_l(\iv)$ are defined only on discrete points,
+the respective parts have sign structures similarly to those of $U_l(\tau)$.
+Figure~\ref{fig:sampling_points_matsubara} shows the basis functions for the largest $l$ 
+as well as the corresponding sampling frequencies generated for the same parameter as in Fig.~\ref{fig:sampling_points_tau}.
+A sign change generally takes place between two adjacent Matsubara frequencies.
+A segment between two adjacent ``roots'' contains at least one sampling points.
+In the upper panel of Fig.~\ref{fig:sampling_points_matsubara},
+you can see that the last segment at high frequencies contains two sampling points.
+This improves the condition number slighly (see below).
+
+Let $\bar{\nu}_1 < \cdots < \bar{\nu}_{N_\mathrm{smp}}$ ($N_\mathrm{smpl}\ge N$)
+be such sampling frequencies,
+one can evaluate the expansion coefficients as
+\begin{align}
+    g_l &= \underset{g_l}{\mathrm{argmin}}
+        \sum_k \bigg| \hat G(\ii\vk) - \sum_{l=0}^{N_\mathrm{smp}-1} \hat{U}_l(\ii\vk)G_l \bigg|^2\nonumber \\
+    &= \pqty{\hat{\Fmat}^+ \boldsymbol{g}}_l.\label{eq:fitmatsubara}
+\end{align}
+
+The generation of the sampling frequencies and fitting can be done as follows:
+\begin{python}
+smpl_matsu = irbasis3.MatsubaraSampling(basis)
+print("Sampling frequencies: ", smpl_matsu.sampling_points)
+print("Condition number: ", smpl_matsu.cond)
+\end{python}
+Here, \texttt{eval\_gtau} is a function that evaluates $G(\tau)$ at given imaginary times.
+For $\wmax=\beta=10$ and $N=30$, the condition number is as small as 5.89.
+A more detailed discussion on the condition numbers is found in Appendix B of Ref.~\cite{shinaoka2021efficient}
+
+
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.55\columnwidth]{uhat.pdf}
+    \caption{
+    Basis function $U_l(\tau)$ with $l=29$ computed for $\wmax=10$ and $\beta=10$.
+    The vertical lines denotes the positions of the associated sampling frequencies.
+    The lower panel is an enlargement of the upper panel at low frequencies.
+    }
+    \label{fig:sampling_points_matsubara}
+\end{figure}
 
 
 \subsection{Robustness against noise and regularization}
