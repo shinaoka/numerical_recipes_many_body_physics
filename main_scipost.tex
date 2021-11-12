@@ -1051,6 +1051,18 @@ One can see an excellent agreement with the exact results.
     \label{fig:sparse_sampling_gl}
 \end{figure}
 
+
+\begin{Exercise}
+    One can create a \texttt{MatsubaraSampling} object by explicitly specifying a set of sampling points as follows.
+    Compute the condition number for a uniform mesh.
+    \begin{python}
+    # Set your sampling frequencies.
+    # Use odd integers for fermionic frequencies
+    my_smpl_points = ***
+    smpl_matsu = irbasis3.MatsubaraSampling(basis, sampling_points=my_smpl_points)
+    \end{python}
+\end{Exercise}
+
 %
 %\subsection{Robustness against noise and regularization}
 %
