@@ -1021,40 +1021,51 @@ The generation of the sampling frequencies and fitting can be done as follows:
 smpl_matsu = irbasis3.MatsubaraSampling(basis)
 print("Sampling frequencies: ", smpl_matsu.sampling_points)
 print("Condition number: ", smpl_matsu.cond)
+gl_reconst_sparse_matsu = smpl_matsu.fit(eval_giv(smpl_matsu.sampling_points))
 \end{python}
-Here, \texttt{eval\_gtau} is a function that evaluates $G(\tau)$ at given imaginary times.
-For $\wmax=\beta=10$ and $N=30$, the condition number is as small as 5.89.
-A more detailed discussion on the condition numbers is found in Appendix B of Ref.~\cite{shinaoka2021efficient}
-
-
+Here, \texttt{eval\_giv} is a function that evaluates $G(\iv)$ at given imaginary times.
+For $\wmax=\beta=10$ and $N=30$, the condition number is as small as 11.26.
+Figure~\ref{fig:sparse_sampling_gl} shows the expansion coefficients of the Green's functions of 
+the Hubbard atom reconstructed by sparse sampling.
+One can see an excellent agreement with the exact results.
 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.55\columnwidth]{uhat.pdf}
+    \includegraphics[width=0.8\columnwidth]{uhat.pdf}
     \caption{
-    Basis function $U_l(\tau)$ with $l=29$ computed for $\wmax=10$ and $\beta=10$.
-    The vertical lines denotes the positions of the associated sampling frequencies.
-    The lower panel is an enlargement of the upper panel at low frequencies.
+    Basis function $U_l(\iv)$ ($l=9,~29$) computed for $\wmax=10$ and $\beta=10$.
+    The vertical lines denotes the positions of the sampling frequencies associated
+    with $U_{29}(\iv)$.
+    %The lower panel is an enlargement of the upper panel at low frequencies.
     }
     \label{fig:sampling_points_matsubara}
 \end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\columnwidth]{gl_sparse.pdf}
+    \caption{
+        Expansion coefficients of the Green's function for the Hubbard atom
+        reconstructed by sparse sampling ($\beta=\wmax=10$).
+    }
+    \label{fig:sparse_sampling_gl}
+\end{figure}
 
-
-\subsection{Robustness against noise and regularization}
-
-As reviewed in the lecture note, \textit{fitting} is a convenient way to transform numerical data either in the imaginary-time domain or in the imaginary-frequency domain.
-In the practical calculations, we need a special care on the numerical stability of the fitting.
-We explain how to do it in a stable way using several typical cases.
-
+%
+%\subsection{Robustness against noise and regularization}
+%
+%As reviewed in the lecture note, \textit{fitting} is a convenient way to transform numerical data either in the imaginary-time domain or in the imaginary-frequency domain.
+%In the practical calculations, we need a special care on the numerical stability of the fitting.
+%We explain how to do it in a stable way using several typical cases.
+%
 %\subsubsection{Fitting \textit{clean} numerical data}
-\begin{itemize}
-    \item Matsubaqra data
-    \item Regularization
-    \item Condition number
-    \item What if the data is not \textit{clean}?
-    \item How to detect overfitting
-\end{itemize}
+%\begin{itemize}
+%    \item Matsubaqra data
+%    \item Regularization
+%    \item Condition number
+%    \item What if the data is not \textit{clean}?
+ %   \item How to detect overfitting
+%\end{itemize}
 
 \clearpage
 \section{Second-order perturbation}
