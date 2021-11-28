@@ -1,0 +1,3 @@
+irbasis3
+matplotlib
+ipykernel

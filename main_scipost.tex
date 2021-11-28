@@ -165,8 +165,8 @@ In particular, one can show
    c^{(1)}_{AB} &= \poissonbracket{A}{B}.
 \end{align}
 
-\subsection{Imaginary-time representation}
-\textcolor{red}{Write it!}
+%\subsection{Imaginary-time representation}
+%\textcolor{red}{Write it!}
 
 \subsection{Fermionic one-particle Green's function}
 We focus on the fermionic cases where $A$ and $B$ are annihilation and creation operators of fermions, respectively.
@@ -1081,14 +1081,145 @@ One can see an excellent agreement with the exact results.
 
 \clearpage
 \section{Second-order perturbation}
-In the previous sections,
-you have learned how to store numerical data of Matsubara Green's functions
+In the previous sections, you have learned how to store numerical data of Matsubara Green's functions.
 and transform them between different domains efficiently.
-You are now ready to learn how to solve a diagrammatic equations
-in this and subsequent sections.
-This section will be focused on one of the most simple examples,
-i.e., second-order perturbation calculations.
+You are now ready to learn how to solve a diagrammatic equations.
+Let us start with the simplest example.
 
+\subsection{Model}
+We consider the Hubbard model on a square lattice at half filling,
+whose Hamiltonian is given by
+\begin{align}
+    \mathcal{H} &= -t \sum_{\langle i, j\rangle}
+        c^\dagger_{i\sigma} c_{j\sigma}
+        + U \sum_i n_{i\uparrow} n_{i\downarrow}
+        - \mu \sum_i (n_{i\uparrow} + n_{i\downarrow}),
+\end{align}
+where $\mu = U/2$, $t~(=1)$ a hopping integral,
+$c^\dagger_{i\sigma}~(c_{i\sigma})$ a creation (annihilation) operator
+for an electron with spin $\sigma$ at site $i$,
+$\mu~(=U/2)$. The non-interacting band dispersion is given by
+\begin{align}
+    \epsilon(\bk,\sigma) &= -2 (\cos{k_x} + \cos{k_y}),
+\end{align}
+where $\bk=(k_x, k_y)$.
+%As knonw, the model exhibits a transition to the antiferromagnetic order with 
+%the wave vector $\bm{Q}=(\pi,\pi)$ shown in Fig.~\ref{fig:antiferro}.
+%Thus, we consider two sublattices A and B shown in Fig.~\ref{fig:antIiferro}(b).
+%
+%At half filling $\mu = U/2$,
+%A Hartree-Fock self-consistent equation for this model reads
+%\begin{align}
+    %n_\sigma &= \frac{1}{N}\sum_{\bk} f(\epsilon_{\bk\sigma}),\\
+    %\epsilon_{\bk\sigma} &= \epsilon_{0,\bk} + U n_{\bar \sigma} - \mu.
+%\end{align}
+%where $f(\epsilon) = \frac{1}{1+e^{\beta \epsilon}}$.
+%Self-consistent calculations can be peformed efficiently without using Green's functions.
+%The following is a sample Python code.
+%%
+%Figure~\ref{fig:hf} shows results computed by the code for $U=***$.
+%The system shows an antiferromagnetic magnetic transition at $T_\mathrm{c} \simeq ***$.
+%
+%Although the Hartree-Fock calculations can be peformed most efficiently 
+%As a toy example, let us implement the self-consistent equations using Green's functions.
+%The electron density can be computed by
+%\begin{align}
+    %G(\iv, \bk) &= \frac{1}{N}\sum_{\bk} \frac{1}{\iv -  \epsilon_{\bk\sigma}}.
+%\end{align}
+%
+%
+%\clearpage
+%\section{Second-order perturbation}
+%In the previous sections,
+%you have learned how to store numerical data of Matsubara Green's functions
+%and transform them between different domains efficiently.
+%You are now ready to learn how to solve a diagrammatic equations
+%in this and subsequent sections.
+%In this section,
+%as a simple example, we calculate the self-energy of the two-dimensional Hubbard model within the range of second-order perturbations.
+%
+%
+%We assume the band dispersion
+%\begin{align}
+    %\epsilon(k) &= -2 (\cos{k_1} + \cos{k_2}),
+%\end{align}
+%where $k_1$ and $k_2$ are momenta.
+The corresponding non-interacting Green's function is given by
+\begin{align}
+    G(\iv, \bk) &= \frac{1}{\iv - \epsilon(\bk)},
+\end{align}
+where $\nu$ is a fermionic frequency.
+
+%We consider an onsite interaction,
+%\begin{align}
+  %& \sum_r U n_{\uparrow}(r) n_{\downarrow}(r)
+%\end{align}
+%https://repository.kulib.kyoto-u.ac.jp/dspace/bitstream/2433/97757/1/KJ00004705688.pdf
+\begin{figure}
+    \centering
+    \caption{Seocond-order diagram for the Hubbard model.
+    The two solid lines denote the non-interacting Green's function,
+    while the dotted one donotes the onsite repulsion $U$.
+    }
+    \label{fig:second-order-diagram}
+\end{figure}
+
+Figure~\ref{fig:second-order-pertub-diagram} illustrates the diagram of the second-order perturbation.
+%In the Matsubara-frequency domain, the second-order self-energy reads
+%\begin{align}
+   %A & B 
+%\end{align}
+In the imaginary-time domain, the self-energy reads
+\begin{align}
+    \Sigma(\tau, \br) &= U^2 G^2(\tau, \br) G(\beta-\tau, \br),
+\end{align}
+where $\br$ represents a position in real space.
+Note that the first-order term of the self-energy, i.e., a Hartree term, is absorbed into the chemical potentail,
+and thus does not take effect.
+The Fourier transform of the Green's function between the momentum and real-space domains is defined as follows:
+\begin{align}
+    G(\iv, \br) &= \frac{1}{N} \sum_{\bk} e^{-\ii \bk \cdot \br} G(\iv, \bk),\label{eq:ft-to-gr}\\
+    G(\iv, \bk) &= \sum_{\br} e^{\ii \bk \cdot \br} G(\iv, \br).\label{eq:ft-to-gk}
+\end{align}
+The same applies to the self-energy.
+
+\subsection{Fast Fourier transform between the real-space and momentum spaces}
+We use regular 2D meshes for the real-space and momen spaces.
+More specifically, a point in the real space $\br$ is represented by three integers as
+$\br=(r_1, r_2)$, where $0 \le r_\alpha \le L-1$.
+A point in the momentum space $\bk$ is represented by three integers as
+$\bk=(2\pi k_1/L, 2\pi k_2/L)$, where $0 \le k_\alpha \le L-1$.
+
+\begin{align}
+    G_{m,r_1, r_2} &= \frac{1}{N} F(G_{m, k_1, k_2}),\\
+    G_{m,k_1, k_2} &= N F^{-1}(G_{m, r_1, r_2}).
+\end{align}
+Here, $F$ denotes two-dimentional discrete Fourier transform (DFT) and $F^{-1}$ its transform,
+which are defined as
+\begin{align}
+    x_{n_1, n_2} &= \sum_{m_1,m_2=0}^{L-1} x_{m_1,m_2} e^{-\frac{2\pi \sum_\alpha n_\alpha m_\alpha}{L}\ii}= F(x_{m_1, m_2}),\\
+    y_{m_1, m_2} &= \frac{1}{L^2} \sum_{n_1,n_2=0}^{L-1} x_{n_1,n_2} e^{\frac{2\pi \sum_\alpha n_\alpha m_\alpha}{L}\ii} = F^{-1}(x_{n_1, n_2}).
+\end{align}
+The DFT can be performed efficiently by the fast Fourier transform algorithm,
+which is implemented in many numerical libraries such as FFTW and FFTPACK.
+The computational complexity of performing Eqs.~\eqref{eq:ft-to-gr} and \eqref{eq:ft-to-gk} using FFT
+scales as $O(L^2 \log L)$,
+which is considerably smaller than that of the naive implementation [$O(L^3)$] for large $L$.
+
+%
+%This Fourier transform can be performed efficiently using the FFT algorithm.
+%The one-dimensional (inverse) discrete Fourier transform are defined as
+%\begin{align}
+    %y_m &= \frac{1}{N} \sum_{n=0}^{N-1} x_n e^{\frac{2\pi n m}{N}\ii},\\
+    %x_n &= \sum_{m=0}^{N-1} x_m e^{-\frac{2\pi n m}{N}\ii}.
+%%\end{align}
+%%where IFFT denotes inverse FT.
+%Two- and three-dimensional discrete are defined in a similar way.
+%
+%
+%First, for $\beta = 10^3$ and $\wmax = 10^2$ ($\Lambda=10^5$), 
+%we construct a basis object (with 138 basis functions).
+%The generation of sampling points and the computation of $\hatFmat_\alpha$ and $\Fmat_\alpha$ as well as their pseudo-inverse matrices are done by \texttt{MatsubaraSampling} and \texttt{TauSampling}.
 
 \clearpage
 \section{Random phase approximation}
