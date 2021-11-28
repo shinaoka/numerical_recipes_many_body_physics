@@ -1098,11 +1098,13 @@ whose Hamiltonian is given by
 where $\mu = U/2$, $t~(=1)$ a hopping integral,
 $c^\dagger_{i\sigma}~(c_{i\sigma})$ a creation (annihilation) operator
 for an electron with spin $\sigma$ at site $i$,
-$\mu~(=U/2)$. The non-interacting band dispersion is given by
+$\mu~(=U/2)$.
+The non-interacting band dispersion is given by
 \begin{align}
-    \epsilon(\bk,\sigma) &= -2 (\cos{k_x} + \cos{k_y}),
+    \epsilon(\bk) &= -2 (\cos{k_x} + \cos{k_y}),
 \end{align}
 where $\bk=(k_x, k_y)$.
+Hereafter, we ignore the spin dependence.
 %As knonw, the model exhibits a transition to the antiferromagnetic order with 
 %the wave vector $\bm{Q}=(\pi,\pi)$ shown in Fig.~\ref{fig:antiferro}.
 %Thus, we consider two sublattices A and B shown in Fig.~\ref{fig:antIiferro}(b).
@@ -1146,7 +1148,7 @@ where $\bk=(k_x, k_y)$.
 %where $k_1$ and $k_2$ are momenta.
 The corresponding non-interacting Green's function is given by
 \begin{align}
-    G(\iv, \bk) &= \frac{1}{\iv - \epsilon(\bk)},
+    G(\iv, \bk) &= \frac{1}{\iv - \epsilon(\bk)},\label{eq:Gk}
 \end{align}
 where $\nu$ is a fermionic frequency.
 
@@ -1171,7 +1173,7 @@ Figure~\ref{fig:second-order-pertub-diagram} illustrates the diagram of the seco
 %\end{align}
 In the imaginary-time domain, the self-energy reads
 \begin{align}
-    \Sigma(\tau, \br) &= U^2 G^2(\tau, \br) G(\beta-\tau, \br),
+    \Sigma(\tau, \br) &= U^2 G^2(\tau, \br) G(\beta-\tau, \br),\label{eq:sigma_r}
 \end{align}
 where $\br$ represents a position in real space.
 Note that the first-order term of the self-energy, i.e., a Hartree term, is absorbed into the chemical potentail,
@@ -1205,6 +1207,15 @@ which is implemented in many numerical libraries such as FFTW and FFTPACK.
 The computational complexity of performing Eqs.~\eqref{eq:ft-to-gr} and \eqref{eq:ft-to-gk} using FFT
 scales as $O(L^2 \log L)$,
 which is considerably smaller than that of the naive implementation [$O(L^3)$] for large $L$.
+
+\subsection{Implementation}
+We explain how to implement the computation of the self-energy step by step.
+\begin{enumerate}
+    \item Compute $G(\bk, \iv)$ by solving Eq.~\eqref{eq:Gk}.
+    \item Transform $G(\bk, \iv)$ to $G_\sigma(\br, \iv)$ by FFT.
+    \item Compute $\Sigma(\tau, \br)$ using Eq.~\eqref{eq:sigma_r}.
+    \item Transform $\Sigma(\tau, \br)$ to $\Sigma(\iv, \br)$ by FFT.
+\end{enumerate}
 
 %
 %This Fourier transform can be performed efficiently using the FFT algorithm.
