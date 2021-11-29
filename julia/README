@@ -1,0 +1,4 @@
+# If you want to build an image manually, please type
+cd /PATH_TO_REPOSITORY/numerical_recipes_many_body_physics
+docker build -f .devcontainer/Dockerfile .
+#docker build -f /Users/hiroshi/git/papers/numerical_recipes_many_body_physics/julia/.devcontainer/Dockerfile -t vsc-julia-a0b38afcf1d493b59382d3f5e82add98 /Users/hiroshi/git/papers/numerical_recipes_many_body_physics/julia
