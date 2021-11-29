@@ -1,8 +1,8 @@
 using Pkg
-Pkg.add("EllipsisNotation")
-Pkg.add("BenchmarkTools")
-Pkg.add("StaticArrays")
-Pkg.add("CPUTime")
+#Pkg.add("EllipsisNotation")
+#Pkg.add("BenchmarkTools")
+#Pkg.add("StaticArrays")
+#Pkg.add("CPUTime")
 Pkg.add("Plots")
 Pkg.add("GR")
 Pkg.add("PyPlot")
