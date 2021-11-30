@@ -1201,13 +1201,43 @@ scales as $O(L^2 \log L)$,
 which is considerably smaller than that of the naive implementation [$O(L^3)$] for large $L$.
 
 \subsection{Implementation}
-We explain how to implement the computation of the self-energy step by step.
+We explain how to implement the computation of the self-energy step by step as fllows.
 \begin{enumerate}
     \item Compute $G(\bk, \iv)$ by solving Eq.~\eqref{eq:Gk}.
     \item Transform $G(\bk, \iv)$ to $G_\sigma(\br, \iv)$ by FFT.
     \item Compute $\Sigma(\tau, \br)$ using Eq.~\eqref{eq:sigma_r}.
     \item Transform $\Sigma(\tau, \br)$ to $\Sigma(\iv, \br)$ by FFT.
 \end{enumerate}
+
+\subsubsection{Step 1}
+This can be achieved by using \texttt{numpy.linalg.inv} in Python:
+\begin{python}
+\end{python}
+Note that \texttt{numpy.linalg.inv} can be used for computing matrix-valued Green's functons, i.e., for multi-orbital systems.
+Please refer to the numpy document if you are interested in.
+Alternatively, you can use loops over $\bk$ and $\iv$, which is substantially slower in Python.
+
+In Julia, you can simply use loops as follows:
+%\begin{julia}
+%\end{julia}
+No fancy numpy techniques are required any more.
+
+\subsubsection{Step 2}
+This step can be done by FFT. FFT is implemented in both of \texttt{numpy} and \texttt{scipy}:
+They are pythonic wappers around a Fortran library, \texttt{{FFTPACK}.
+In the following, we use the numpy implementation:
+\begin{python}
+import numpy as  np    
+\end{python}
+
+In Julia, you can use \texttt{FFTW.jl}, which is a wrapper around \texttt{FFTW}.
+%\begin{julia}
+%
+%\end{julia}
+
+\subsection{Step 3}
+We first evalute 
+
 
 %
 %This Fourier transform can be performed efficiently using the FFT algorithm.
