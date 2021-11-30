@@ -20,5 +20,7 @@
     // specify vs code extentions you will use on remote
     "extensions": [
         "julialang.language-julia"
+        "ms-python.python",
+        "ms-python.vscode-pylance"
     ]
 }
