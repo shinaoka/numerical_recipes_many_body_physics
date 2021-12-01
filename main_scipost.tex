@@ -1210,6 +1210,7 @@ We explain how to implement the computation of the self-energy step by step as f
 \end{enumerate}
 
 \subsubsection{Step 1}
+We compute $G(\bk, \iv)$ by solving Eq.~\eqref{eq:Gk} on fermionic sampling frequencies.
 This can be achieved by using \texttt{numpy.linalg.inv} in Python:
 \begin{python}
 \end{python}
@@ -1222,8 +1223,13 @@ In Julia, you can simply use loops as follows:
 %\end{julia}
 No fancy numpy techniques are required any more.
 
-\subsubsection{Step 2}
-This step can be done by FFT. FFT is implemented in both of \texttt{numpy} and \texttt{scipy}:
+\subsubsection{Step 3}
+We transform the Green's function to the IR by using the \texttt{fit} function.
+
+
+\subsubsection{Step 4}
+We transform the data from the momentum space to the real space by FFT.
+FFT is implemented in both of \texttt{numpy} and \texttt{scipy}:
 They are pythonic wappers around a Fortran library, \texttt{{FFTPACK}.
 In the following, we use the numpy implementation:
 \begin{python}
@@ -1235,8 +1241,21 @@ In Julia, you can use \texttt{FFTW.jl}, which is a wrapper around \texttt{FFTW}.
 %
 %\end{julia}
 
-\subsection{Step 3}
-We first evalute 
+\subsubsection{Step 5}
+We evaluate the self-energy using Eq.~\eqref{eq:sigma_r}.
+The Python code is as follows:
+
+In Julia, you can use broadcasting as well as follows::
+
+Alternativley, you can use a loop. It is up to you.
+
+\subsubsection{Step 6}
+We fit the self-energy on the sampling points and transform the data to the IR basis.
+Note that the self-energy can be represented compactly by IR because the self-energy does not contain a Hartree term by construction.
+Otherwise, the Hartree term must be treated seperately.
+
+\subsubsection{Step 7}
+Now, we are ready to evalute the self-energy on arbitrary fermionic Matsubara frequencies.
 
 
 %
