@@ -412,7 +412,7 @@ A native inverse Fourier transformation of $\tilde{G}(\iv)$ is safer than that o
 $\tilde{G}(\iv)$ has only a slope discontinuity in the $\tau$ domain.
 For $0 < \tau<\beta$,
 \begin{align}
-    G(\tau) &\approx \sum_{n=-n_\mathrm{max}}^{n_\mathrm{max}} e^{\ii \nu_n \tau }\tilde{G}(\iv) - \frac{c^0}{2},\label{eq:inverse-transform-c0}
+    G(\tau) &\approx \frac{1}{\beta} \sum_{n=-n_\mathrm{max}}^{n_\mathrm{max}} e^{-\ii \nu_n \tau }\tilde{G}(\iv) - \frac{c^0}{2},\label{eq:inverse-transform-c0}
 \end{align}
 where $\nu_n = (2n+1)\pi/\beta$.
 The inverse Fourier transforms of higher-order terms can be found in Appendix B of the E. Gull's Ph. D thesis.
