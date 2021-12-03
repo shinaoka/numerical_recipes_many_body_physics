@@ -1364,8 +1364,8 @@ decay as fast as the singular values.
 Now, we are ready to evalute the self-energy on arbitrary fermionic Matsubara frequencies.
 \begin{python}
 my_freqs = smpl_matsu.sampling_points
-uhatt = basis.uhat(my_freqs).T
-res = np.einsum('wl, lIJ->wIJ', uhatt, skl)
+uhat = basis.uhat(my_freqs)
+res = np.einsum('lw, lIJ->wIJ', uhat, skl, optimize=True)
 \end{python}
 
 
