@@ -18,6 +18,7 @@
 \newcommand{\Ne}{{\ensuremath{N_\mathrm{e}}}}
 \newcommand{\bk}{\ensuremath{{\bf k}}}
 \newcommand{\br}{\ensuremath{{\bf r}}}
+\newcommand{\bq}{\ensuremath{{\bf q}}}
 
 \newcommand{\bx}{\bm{x}}
 \newcommand{\by}{\bm{y}}
@@ -1385,6 +1386,24 @@ res = np.einsum('lw, lIJ->wIJ', uhat, skl, optimize=True)
 %The generation of sampling points and the computation of $\hatFmat_\alpha$ and $\Fmat_\alpha$ as well as their pseudo-inverse matrices are done by \texttt{MatsubaraSampling} and \texttt{TauSampling}.
 
 \clearpage
+\section{FLEX}
+
+\begin{align}
+    G^{(0)}(\bk, \iv) &= \frac{1}{\iv - \mathcal{H}(\bk)},\\
+    G(\bk, \iv) &= \frac{1}{\iv - \mathcal{H}(\bk) - \Sigma(\bk, \iv)},\\
+    \Sigma_{12}(\bk, \iv) &= T~\Gamma_{1324}(\bq, \iw) G_{34}(\bk-\bq, \iv-\iw),\\
+    \Gamma_{1234}(\bq, \iw) &= U \chi(\bq, \iw) U,\\
+    \chi^{(0)}_{1234}(\bq,\iw) &= - T\sum_{\bk,\iv} G_{13}(\bk,\iv) G_{42}(\bk-\bq, \iv-\iw),\\
+    \chi(\bq,\iw) &= [1 - \chi^{(0)}(\bq,\iw) U]^{-1} \chi^{(0)}(\bq, \iw).
+\end{align}
+
+We use $k=(\bk, \iv)$, $r=(\br, \tau)$
+
+\clearpage
+\section{Wannier90}
+
+
+\clearpage
 \section{Random phase approximation}
 \subsection{Hartree-Fock approximation}
 \clearpage
@@ -1464,9 +1483,6 @@ We define Fourier transfrom between the real space and the momentum space as
 
 \clearpage
 \section{Dynamical mean-field theory}
-
-\clearpage
-\section{Wannier90}
 
 \clearpage
 \section{MPI parallelization}
