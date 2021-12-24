@@ -1484,14 +1484,14 @@ We define Fourier transfrom between the real space and the momentum space as
 \clearpage
 \section{Dynamical mean-field theory}
 We implement a DMFT self-consistent cycle using the iterative perturbation theory (IPT).
-
+For paramagenetic soluations of the single-orbital Hubbard model with a semicircular density of sates at half filling,
+the self-consistent equation reads
 \begin{align}
-    G_\mathrm{loc}(\iv) &= \int \dd \epsilon \frac{\rho(\epsilon)}{\iv + \mu - \epsilon - \Sigma(\iv)},\\
+    G_\mathrm{loc}(\iv) &= \int_{-2}^2 \dd \epsilon \frac{\rho(\epsilon)}{\iv + \mu - \epsilon - \Sigma(\iv)},\\
     \mathcal{G}^{-1}(\iv) &= G_\mathrm{loc}^{-1}(\iv) + \Sigma(\iv),\\
-    \Sigma(\tau) &= U^2 \mathcal{G}(\tau) \mathcal{G}(\tau) \mathcal{G}(\beta-\tau).
+    \Sigma(\tau) &= U^2 \mathcal{G}(\tau) \mathcal{G}(\tau) \mathcal{G}(\beta-\tau),
 \end{align}
-
-We use
+where
 \begin{align}
     \rho(\epsilon) &= \frac{1}{2\pi}\sqrt{4-\epsilon^2},\\
     \mu &= U/2.
