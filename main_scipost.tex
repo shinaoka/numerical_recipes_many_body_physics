@@ -1204,15 +1204,11 @@ scales as $O(L^2 \log L)$,
 which is considerably smaller than that of the naive implementation [$O(L^3)$] for large $L$.
 
 \subsection{Implementation}
+<<<<<<< HEAD
+%We explain how to implement the computation of the self-energy step by step as fllows.
+=======
 We explain how to compute the self-energy step by step below.
 For a complete code, refer to the notebook \texttt{section8.ipynb}.
-%\begin{enumerate}
-    %\item Compute $G(\bk, \iv)$ by solving Eq.~\eqref{eq:Gk}.
-    %\item Transform $G(\bk, \iv)$ to $G_\sigma(\br, \iv)$ by FFT.
-    %\item Compute $\Sigma(\tau, \br)$ using Eq.~\eqref{eq:sigma_r}.
-    %\item Transform $\Sigma(\tau, \br)$ to $\Sigma(\iv, \br)$ by FFT.
-%\end{enumerate}
-
 \subsubsection*{Step 1: Generate an IR basis and associated sampling points}
 We generate an IR basis for $\Lambda=10^5$ and $\beta=10^3$ with a cutoff of $10^{-7}$.
 \begin{python}
@@ -1237,6 +1233,19 @@ smpl_matsu = irbasis3.MatsubaraSampling(basis)
 nw = smpl_matsu.sampling_points.size
 print("cond (matsu): ", smpl_matsu.cond)
 \end{python}
+<<<<<<< HEAD
+Obviously, this works only for a single-orbital problem.
+\texttt{numpy.linalg.inv} can be used instead for computing matrix-valued Green's functons, i.e., for multi-orbital systems.
+Please refer to Appendix~\ref{fig:matrix-dyson}.
+%Alternatively, you can use loops over $\bk$ and $\iv$, which is substantially slower in Python.
+
+In Julia, you can do the same using one of the following methods:
+%\begin{julia}
+%\end{julia}
+%No fancy numpy techniques are required any more.
+
+The first uses loops, the second one uses broadcasting.
+=======
 You will see the condition numbers are around 180 and 250 for imaginary-time and Matsubara-frequency samplings,
 repspectively.
 This means that we may lose two significant digits when fitting numerical data on the sampling points.
@@ -1293,6 +1302,7 @@ Please keep it in your mind that using too many fansy numpy tricks may make your
 %
     %\begin{flushleft}\hspace{8em}(d)\end{flushleft}
     %\includegraphics[width=0.5\columnwidth]{second_order_sigma_iv.pdf}
+>>>>>>> d3bf51c69f8fcbe7534d0f553199a1d588090ffc
 
     \caption{
         Second-order perturbation for the Hubbard model on a square lattice.
@@ -1305,8 +1315,16 @@ Please keep it in your mind that using too many fansy numpy tricks may make your
 \end{figure}
 
 
+<<<<<<< HEAD
+\subsubsection{Step 4}
+We transform the data from the momentum space to the real space by FFT.
+FFT is implemented in both of \texttt{numpy} and \texttt{scipy}:
+They are pythonic wappers around a Fortran library, \texttt{FFTPACK}.
+In the following, we use the numpy implementation:
+=======
 \subsubsection*{Step 3: Evaluate the Green's function on sampling points in the imaginary-time domain}
 We evaluate the Green's function on the sampling points in the imaginary-time domain.
+>>>>>>> d3bf51c69f8fcbe7534d0f553199a1d588090ffc
 \begin{python}
 # G(l, k): (L, nk)
 gkl = smpl_matsu.fit(gkf, axis=0)
