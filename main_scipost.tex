@@ -738,20 +738,20 @@ The singular term, i.e., the constant term in $\tau$, must be treated separately
 
 \subsection{Basis functions in Matsubara frequencies}
 %\textcolor{red}{Write it!}
-We basis functions in Matsubara frequencies as
+The basis functions in Matsubara frequencies are defined as
 \begin{align}
     \hat{U}_l(\iv) &\equiv \int_0^\beta \dd \tau e^{\iv\tau} U_l(\tau),
 \end{align}
 where $\nu = m\pi/\beta$ ($m$ are even/odd integers for bosons and fermions, respectively).
-For fermions, $\hat{U}_(\iv)$ are purely real/imaginary for odd/even $l$.
+For fermions, ${\hat{U}}_(\iv)$ are purely real/imaginary for odd/even $l$.
 
 \subsection{Numerical demonstration}
 We now demonstrate how to generate IR basis functions by decomposing the kernel using the Python library
-\texttt{irbasis3}.
+\texttt{sparse-ir}.
 This can be used in the Julia language through \texttt{PyCall.jl}.
-You can install \texttt{irbasis3} by running the following command from a shell:
+You can install \texttt{sparse-ir} by running the following command from a shell:
 \begin{verbatim}
-$ pip install -U irbasis3 xprec
+$ pip install -U sparse-ir xprec
 \end{verbatim}
 Alternatively, you can use a template jupyter notebook at Google Colab~\cite{colab-template}.
 In the repository, we provide two Jupyter notebooks (section6.ipynb, section6\_julia.ipynb)
@@ -767,11 +767,10 @@ In Python, we can generate a feromioc basis object \texttt{basis}
 by computing singular values down to $S_l/S_0 \simeq 10^{-10}$
 for $\Lambda=10^2$ and $\beta=10$ as follows:
 \begin{python}
-import irbasis3
+import sparse_ir
 lambda_ = 100
 beta = 10
-K = irbasis3.KernelFFlat(lambda_=100)
-basis = irbasis3.FiniteTempBasis(K, statistics='F', beta=beta, eps=1e-10)
+basis = sparse_ir.FiniteTempBasis('F', beta, lambda_/beta, eps=1e-10)
 \end{python}
 
 %\subsubsection{Singular values}
@@ -807,7 +806,7 @@ You can learn how to use them in the notebook.
     \includegraphics[width=0.55\columnwidth]{ir_basis_svals.pdf}
     \includegraphics[width=0.55\columnwidth]{ir_basis_functions.pdf}
     \caption{
-        Singular values and IR basis functions computed by \texttt{irbasis3} for $\Lambda=100$ and $\beta=10$.
+        Singular values and IR basis functions computed by \texttt{sparse-ir} for $\Lambda=100$ and $\beta=10$.
         $\hat U(\iv)$ were computed at fermionic frequencies.
         Symmetry dictates that $\hat U(\iv)$ are purely real or imaginary.
         We plot only the respective part.
@@ -897,7 +896,7 @@ is a reasonable choice of the division points.
 If $\rho(\omega)$ is smooth enough within each subinterval,
 the result converges exponentially with increasing the degree of the Gauss-Legendre quadrature.
 
-We demonstrate how to do this transform using \texttt{irbasis3} for the spectral function consisting 
+We demonstrate how to do this transform using \texttt{sparse-ir} for the spectral function consisting 
 of three Gausssian peaks (see the solid line of Fig.~\ref{fig:three_gaussian}).
 This can be done by using the \texttt{overlap} function associated with the basis object \texttt{basis}
 as follows:
@@ -930,7 +929,7 @@ $N P$ ($N$ is the size of the IR basis and $P$ is the degeree of the quadrature)
 From experience, $P=10$--$20$ are large enough.
 At low tempertures,
 this number scales logarithmically with $\beta$.
-%This functionality is implemented in \texttt{irbasis3}, which can be used as follows:
+%This functionality is implemented in \texttt{sparse-ir}, which can be used as follows:
 This can be done similarly to the case of $\rho(\omega)$ as follows:
 \begin{python}
 gl_reconst = basis.u.overlap(eval_gtau)
@@ -970,7 +969,7 @@ $U_{N-1}(\tau)$ (see Fig.~\ref{fig:sampling_points_tau}).
 \end{figure}
 The generation of sampling points and fitting can be done as follows:
 \begin{python}
-smpl = irbasis3.TauSampling(basis)
+smpl = sparse-ir.TauSampling(basis)
 print("Sampling points: ", smpl.sampling_points)
 print("Condition number: ", smpl.cond)
 gl_reconst_sparse = smpl.fit(eval_gtau(smpl.sampling_points))
@@ -984,7 +983,7 @@ One can create a \texttt{TauSampling} object by explicitly specifying a set of s
 Compute the condition number for a uniform mesh.
 \begin{python}
 my_smpl_points = *** # Set your sampling points.
-smpl = irbasis3.TauSampling(basis, sampling_points=my_smpl_points)
+smpl = sparse-ir.TauSampling(basis, sampling_points=my_smpl_points)
 \end{python}
 \end{Exercise}
 
@@ -1012,7 +1011,7 @@ one can evaluate the expansion coefficients as
 
 The generation of the sampling frequencies and fitting can be done as follows:
 \begin{python}
-smpl_matsu = irbasis3.MatsubaraSampling(basis)
+smpl_matsu = sparse-ir.MatsubaraSampling(basis)
 print("Sampling frequencies: ", smpl_matsu.sampling_points)
 print("Condition number: ", smpl_matsu.cond)
 gl_reconst_sparse_matsu = smpl_matsu.fit(eval_giv(smpl_matsu.sampling_points))
@@ -1053,7 +1052,7 @@ One can see an excellent agreement with the exact results.
     # Set your sampling frequencies.
     # Use odd integers for fermionic frequencies
     my_smpl_points = ***
-    smpl_matsu = irbasis3.MatsubaraSampling(basis, sampling_points=my_smpl_points)
+    smpl_matsu = sparse-ir.MatsubaraSampling(basis, sampling_points=my_smpl_points)
     \end{python}
 \end{Exercise}
 
@@ -1204,9 +1203,6 @@ scales as $O(L^2 \log L)$,
 which is considerably smaller than that of the naive implementation [$O(L^3)$] for large $L$.
 
 \subsection{Implementation}
-<<<<<<< HEAD
-%We explain how to implement the computation of the self-energy step by step as fllows.
-=======
 We explain how to compute the self-energy step by step below.
 For a complete code, refer to the notebook \texttt{section8.ipynb}.
 \subsubsection*{Step 1: Generate an IR basis and associated sampling points}
@@ -1218,22 +1214,19 @@ eps = 1e-7
 nk_lin = 256
 U = 2.0 # Onsite repulsion
 
-wmax = lambda_/beta
-K = irbasis3.KernelFFlat(lambda_=lambda_)
-basis = irbasis3.FiniteTempBasis(K, statistics="F", beta=beta, eps=eps)
+basis = sparse_ir.FiniteTempBasis("F", beta, wmax, eps=eps)
 L = basis.size
 
 # Sparse sampling in tau
-smpl_tau = irbasis3.TauSampling(basis)
+smpl_tau = sparse_ir.TauSampling(basis)
 ntau = smpl_tau.sampling_points.size
 print("cond (tau): ", smpl_tau.cond)
 
 # Sparse sampling in Matsubara frequencies
-smpl_matsu = irbasis3.MatsubaraSampling(basis)
+smpl_matsu = sparse_ir.MatsubaraSampling(basis)
 nw = smpl_matsu.sampling_points.size
 print("cond (matsu): ", smpl_matsu.cond)
 \end{python}
-<<<<<<< HEAD
 Obviously, this works only for a single-orbital problem.
 \texttt{numpy.linalg.inv} can be used instead for computing matrix-valued Green's functons, i.e., for multi-orbital systems.
 Please refer to Appendix~\ref{fig:matrix-dyson}.
