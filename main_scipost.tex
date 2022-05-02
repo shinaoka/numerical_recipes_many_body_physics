@@ -1229,7 +1229,7 @@ print("cond (matsu): ", smpl_matsu.cond)
 \end{python}
 Obviously, this works only for a single-orbital problem.
 \texttt{numpy.linalg.inv} can be used instead for computing matrix-valued Green's functons, i.e., for multi-orbital systems.
-Please refer to Appendix~\ref{fig:matrix-dyson}.
+%Please refer to Appendix~\ref{fig:matrix-dyson}.
 %Alternatively, you can use loops over $\bk$ and $\iv$, which is substantially slower in Python.
 
 In Julia, you can do the same using one of the following methods:
@@ -1238,7 +1238,6 @@ In Julia, you can do the same using one of the following methods:
 %No fancy numpy techniques are required any more.
 
 The first uses loops, the second one uses broadcasting.
-=======
 You will see the condition numbers are around 180 and 250 for imaginary-time and Matsubara-frequency samplings,
 repspectively.
 This means that we may lose two significant digits when fitting numerical data on the sampling points.
@@ -1295,7 +1294,6 @@ Please keep it in your mind that using too many fansy numpy tricks may make your
 %
     %\begin{flushleft}\hspace{8em}(d)\end{flushleft}
     %\includegraphics[width=0.5\columnwidth]{second_order_sigma_iv.pdf}
->>>>>>> d3bf51c69f8fcbe7534d0f553199a1d588090ffc
 
     \caption{
         Second-order perturbation for the Hubbard model on a square lattice.
@@ -1308,16 +1306,11 @@ Please keep it in your mind that using too many fansy numpy tricks may make your
 \end{figure}
 
 
-<<<<<<< HEAD
-\subsubsection{Step 4}
-We transform the data from the momentum space to the real space by FFT.
+\subsubsection{Step 3}
+We transform the data to the real space and imaginary time by FFT and sparse sampling.
 FFT is implemented in both of \texttt{numpy} and \texttt{scipy}:
 They are pythonic wappers around a Fortran library, \texttt{FFTPACK}.
 In the following, we use the numpy implementation:
-=======
-\subsubsection*{Step 3: Evaluate the Green's function on sampling points in the imaginary-time domain}
-We evaluate the Green's function on the sampling points in the imaginary-time domain.
->>>>>>> d3bf51c69f8fcbe7534d0f553199a1d588090ffc
 \begin{python}
 # G(l, k): (L, nk)
 gkl = smpl_matsu.fit(gkf, axis=0)
@@ -1371,142 +1364,6 @@ decay as fast as the singular values.
 %\begin{julia}
 %
 %\end{julia}
-
-\subsubsection*{Step 6: Evaluate the self-energy on arbitrary frequencies/times}
-Now, we are ready to evalute the self-energy on arbitrary fermionic Matsubara frequencies.
-\begin{python}
-my_freqs = smpl_matsu.sampling_points
-uhat = basis.uhat(my_freqs)
-res = np.einsum('lw, lIJ->wIJ', uhat, skl, optimize=True)
-\end{python}
-
-
-%
-%This Fourier transform can be performed efficiently using the FFT algorithm.
-%The one-dimensional (inverse) discrete Fourier transform are defined as
-%\begin{align}
-    %y_m &= \frac{1}{N} \sum_{n=0}^{N-1} x_n e^{\frac{2\pi n m}{N}\ii},\\
-    %x_n &= \sum_{m=0}^{N-1} x_m e^{-\frac{2\pi n m}{N}\ii}.
-%%\end{align}
-%%where IFFT denotes inverse FT.
-%Two- and three-dimensional discrete are defined in a similar way.
-%
-%
-%First, for $\beta = 10^3$ and $\wmax = 10^2$ ($\Lambda=10^5$), 
-%we construct a basis object (with 138 basis functions).
-%The generation of sampling points and the computation of $\hatFmat_\alpha$ and $\Fmat_\alpha$ as well as their pseudo-inverse matrices are done by \texttt{MatsubaraSampling} and \texttt{TauSampling}.
-
-\clearpage
-\section{FLEX}
-
-\begin{align}
-    G^{(0)}(\bk, \iv) &= \frac{1}{\iv - \mathcal{H}(\bk)},\\
-    G(\bk, \iv) &= \frac{1}{\iv - \mathcal{H}(\bk) - \Sigma(\bk, \iv)},\\
-    \Sigma_{12}(\bk, \iv) &= T~\Gamma_{1324}(\bq, \iw) G_{34}(\bk-\bq, \iv-\iw),\\
-    \Gamma_{1234}(\bq, \iw) &= U \chi(\bq, \iw) U,\\
-    \chi^{(0)}_{1234}(\bq,\iw) &= - T\sum_{\bk,\iv} G_{13}(\bk,\iv) G_{42}(\bk-\bq, \iv-\iw),\\
-    \chi(\bq,\iw) &= [1 - \chi^{(0)}(\bq,\iw) U]^{-1} \chi^{(0)}(\bq, \iw).
-\end{align}
-
-We use $k=(\bk, \iv)$, $r=(\br, \tau)$
-
-\clearpage
-\section{Wannier90}
-
-
-\clearpage
-\section{Random phase approximation}
-\subsection{Hartree-Fock approximation}
-\clearpage
-\subsection{Restricted Hartree-Fock calculations of sigle-orbital Hubbard model}
-
-\clearpage
-\subsection{Unrestricted Hartree-Fock calculations of multi-orbital Hubbard model}
-In this subsection, we briefly reivew the unrestricted Hartree-Fock approximation of multi-obital Hubbard model.
-We consider a multi-orbital Hubbard model:
-\begin{align}
-    \hat{H} &= \sum_{ij=1}^N t_{ij} \hat{c}^\dagger_i \hat{c}_j + \frac{1}{2} \sum_{ijkl=1}^N U_{ijlk}\hat{c}^\dagger_i \hat{c}^\dagger_j \hat{c}_k \hat{c}_l
-\end{align}
-Here, we \textit{assume} the following properties:
-\begin{align}
-U_{iilk} &= 0,\label{eq:U-prop-start}\\
-U_{ijll} &= 0,\\
-U_{ijlk} &= U_{jikl}, \\
-U_{ijlk} &= U_{lkij}^*.\label{eq:U-prop-end}
-\end{align}
-
-The antisymmetrized Colomb matrix elements are defined by
-\begin{align}
-    \bar{U}_{ijlk} &\equiv U_{ijlk} - U_{ijkl}.
-\end{align}
-These satisfy
-\begin{align}
-\bar{U}_{ijlk} &= -\bar{U}_{ijkl} = -\bar{U}_{jilk}
-\end{align}
-in addition to Eqs.~(\ref{eq:U-prop-start})--(\ref{eq:U-prop-end}).
-In this notation, the Hamiltonian reads
-\begin{align}
-    \hat{H} &= \sum_{ij=1}^N t_{ij} \hat{c}^\dagger_i \hat{c}_j + \frac{1}{4} \sum_{ijkl=1}^N \bar{U}_{ijlk}\hat{c}^\dagger_i \hat{c}^\dagger_j \hat{c}_k \hat{c}_l.\label{eq:ham-antisymm}
-\end{align}
-
-The mean-field decoupling of Eq.~\eqref{eq:ham-antisymm} yields
-\begin{align}
-& \mathcal{H}_\mathrm{MF} \nonumber \\
-& = \frac{1}{4} \sum_{ijkl=1}^N \bar{U}_{ijlk}
-\Big\{
-\expval{\hat{c}^\dagger_i \hat{c}_l} \hat{c}^\dagger_j \hat{c}_k
-+\hat{c}^\dagger_i \hat{c}_l \expval{\hat{c}^\dagger_j \hat{c}_k}
--\expval{\hat{c}^\dagger_i \hat{c}_k} \hat{c}^\dagger_j \hat{c}_l
--\hat{c}^\dagger_i \hat{c}_k \expval{\hat{c}^\dagger_j \hat{c}_l}\\
-&\hspace{2em} - \expval{\hat{c}^\dagger_i \hat{c}_l} \expval{\hat{c}^\dagger_j \hat{c}_k} + \expval{\hat{c}^\dagger_i \hat{c}_k} \expval{\hat{c}^\dagger_j \hat{c}_l}
-\Big\}\nonumber\\
-& = \frac{1}{2} \sum_{ijkl=1}^N \bar{U}_{ijlk}
-\Big\{
-\expval{\hat{c}^\dagger_i \hat{c}_l} \hat{c}^\dagger_j \hat{c}_k
-+\hat{c}^\dagger_i \hat{c}_l \expval{\hat{c}^\dagger_j \hat{c}_k}
--\expval{\hat{c}^\dagger_i \hat{c}_l} \expval{\hat{c}^\dagger_j \hat{c}_k} 
-\Big\}\nonumber \\
-&= \sum_{ijkl=1}^N \bar{U}_{ijlk}
-\expval{\hat{c}^\dagger_i \hat{c}_l} \hat{c}^\dagger_j \hat{c}_k
--\frac{1}{2}\sum_{ijkl=1}^N \bar{U}_{ijlk}\expval{\hat{c}^\dagger_i \hat{c}_l} \expval{\hat{c}^\dagger_j \hat{c}_k} 
-.
-\end{align}
-
-Thus, the whole HF Hamiltonian reads
-\begin{align}
-\mathcal{H}_\mathrm{HF} &= \sum_{ij=1}^N T_{ij} \hatc_i^\dagger \hatc_j -\frac{1}{2}\sum_{ijkl=1}^N \bar{U}_{ijlk}\expval{\hat{c}^\dagger_i \hat{c}_l} \expval{\hat{c}^\dagger_j \hat{c}_k},
-\end{align}
-where the hopping-matrix elements including the mean fields are given by
-\begin{align}
-T_{ij} \equiv t_{ij} + \sum_{kl=1}^N \bar{U}_{i k j l} \expval{\hatc^\dagger_k \hatc_l}.\label{eq:Tij}
-\end{align}
-
-In a similar manner, one can derive the Hartree-Fock approximation for a lattice system that
-has only intra-unit-cell electron interactions.
-We define Fourier transfrom between the real space and the momentum space as
-\begin{align}
-    c_i(\bk) &=  \sum_{\bf r} e^{\ii {\bf k} {\bf r}} c_i({\bf r}),\\
-    c^\dagger_i(\bk) &=  \sum_{\bf r} e^{-\ii {\bf k} {\bf r}} c^\dagger_i({\bf r}),\\
-    c_i(\br) &= \frac{1}{{N}} \sum_\bk e^{-\ii \bk\cdot\br} c_i(\bk),\\
-    c^\dagger_i(\br) &= \frac{1}{{N}} \sum_\bk e^{\ii \bk\cdot\br} c^\dagger_i(\bk).
-\end{align}
-
-
-\clearpage
-\section{Dynamical mean-field theory}
-We implement a DMFT self-consistent cycle using the iterative perturbation theory (IPT).
-For paramagenetic soluations of the single-orbital Hubbard model with a semicircular density of sates at half filling,
-the self-consistent equation reads
-\begin{align}
-    G_\mathrm{loc}(\iv) &= \int_{-2}^2 \dd \epsilon \frac{\rho(\epsilon)}{\iv + \mu - \epsilon - \Sigma(\iv)},\\
-    \mathcal{G}^{-1}(\iv) &= G_\mathrm{loc}^{-1}(\iv) + \Sigma(\iv),\\
-    \Sigma(\tau) &= U^2 \mathcal{G}(\tau) \mathcal{G}(\tau) \mathcal{G}(\beta-\tau),
-\end{align}
-where
-\begin{align}
-    \rho(\epsilon) &= \frac{1}{2\pi}\sqrt{4-\epsilon^2},\\
-    \mu &= U/2.
-\end{align}
 
 \clearpage
 \section{MPI parallelization}
