@@ -956,7 +956,7 @@ where we define $(\Fmat)_{kl} = U_l(\tauk)$ and $\Fmat^+$ is its pseudo inverse.
 %In practice, different choices of sampling points lead to different numeri
 The numerical stability of this ``fitting'' scheme is determined
 by the condition number of the coefficient matrix $\Fmat$.
-An empiritically good our choice is to use the middle points of the neighboring roots of 
+An empiritically good choice is to use the middle points of the neighboring roots of 
 $U_{N-1}(\tau)$ (see Fig.~\ref{fig:sampling_points_tau}).
 \begin{figure}
     \centering
@@ -969,7 +969,7 @@ $U_{N-1}(\tau)$ (see Fig.~\ref{fig:sampling_points_tau}).
 \end{figure}
 The generation of sampling points and fitting can be done as follows:
 \begin{python}
-smpl = sparse-ir.TauSampling(basis)
+smpl = sparse_ir.TauSampling(basis)
 print("Sampling points: ", smpl.sampling_points)
 print("Condition number: ", smpl.cond)
 gl_reconst_sparse = smpl.fit(eval_gtau(smpl.sampling_points))
@@ -983,7 +983,7 @@ One can create a \texttt{TauSampling} object by explicitly specifying a set of s
 Compute the condition number for a uniform mesh.
 \begin{python}
 my_smpl_points = *** # Set your sampling points.
-smpl = sparse-ir.TauSampling(basis, sampling_points=my_smpl_points)
+smpl = sparse_ir.TauSampling(basis, sampling_points=my_smpl_points)
 \end{python}
 \end{Exercise}
 
@@ -1011,7 +1011,7 @@ one can evaluate the expansion coefficients as
 
 The generation of the sampling frequencies and fitting can be done as follows:
 \begin{python}
-smpl_matsu = sparse-ir.MatsubaraSampling(basis)
+smpl_matsu = sparse_ir.MatsubaraSampling(basis)
 print("Sampling frequencies: ", smpl_matsu.sampling_points)
 print("Condition number: ", smpl_matsu.cond)
 gl_reconst_sparse_matsu = smpl_matsu.fit(eval_giv(smpl_matsu.sampling_points))
@@ -1052,7 +1052,7 @@ One can see an excellent agreement with the exact results.
     # Set your sampling frequencies.
     # Use odd integers for fermionic frequencies
     my_smpl_points = ***
-    smpl_matsu = sparse-ir.MatsubaraSampling(basis, sampling_points=my_smpl_points)
+    smpl_matsu = sparse_ir.MatsubaraSampling(basis, sampling_points=my_smpl_points)
     \end{python}
 \end{Exercise}
 
